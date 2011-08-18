@@ -2,13 +2,16 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.awt.Image;
+import java.awt.Toolkit;
+
 
 
 public class Tools {
 	
 	private static Scanner scanner;
 	private static File file;
-	
+	private static Image[] tileImages;
 	public static int[][] parseData(String input) {
 		String[] lines = input.split("\n");
 		
@@ -27,10 +30,10 @@ public class Tools {
 		return result;
 	}
 	
-	public static String getWorld(String dateiname)
+	public static String getWorld(String filename)
 	{	
 		String world="";
-		file = new File("rsc/"+dateiname);
+		file = new File("rsc/"+filename);
 		
 		try{
 		
@@ -49,6 +52,15 @@ public class Tools {
 		return world;
 	}
 	
+	public static void createTileset () {
+		
+		for (int i=1;i<3;i++){
+			tileImages[i] = Toolkit.getDefaultToolkit().createImage("/rsc/tileSet1.png");
+		}
+		
+		
+		
+	}
 	
 	
 }

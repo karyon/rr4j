@@ -1,7 +1,11 @@
+import java.util.Random;
+
+
 
 public class Map {
-	public Tile [][] mapFields;
-	public int width, height;
+	private Tile[][] mapFields;
+	private int width, height;
+	
 	public Map (int [] [] mapData){
 		
 		width = mapData.length;
@@ -13,4 +17,20 @@ public class Map {
 			}
 		}
 	}
+	
+	public void tileSet()
+	{
+		Random r = new Random();
+		int type = r.nextInt(3);
+		
+		for(int i=0;i<20;i++)
+		{
+			for(int j=0;j<20;j++)
+			{
+				mapFields[i][j] = new Tile(i*20,j*20,type,1);
+			}
+		}
+	}
+	
+	
 }

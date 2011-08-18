@@ -54,7 +54,7 @@ public class Tools {
 	
 	public static void createTileset () {
 		
-		for (int i=1;i<3;i++){
+		for (int i=0;i<3;i++){
 			tileImages[i] = Toolkit.getDefaultToolkit().createImage("/rsc/tile"+i+"png");
 		}
 		

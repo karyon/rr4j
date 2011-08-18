@@ -5,11 +5,11 @@ public class Tile {
 	private int  walkable;
 	private int imageID;  
 	
-	public Tile (int xco,  int yco, int typeData, int tile){
+	public Tile (int xco,  int yco, int typeData, int imgageID){
 		x = xco;
 		y = yco;
 		type = typeData;
-		this.imageID = tile;
+		this.imageID = imgageID;
 		
 		switch (type){
 	    default: walkable = 1;

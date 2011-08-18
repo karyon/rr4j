@@ -9,7 +9,9 @@ public class Main {
 	static Random r = new Random();
 	
 	public static void main(String args[]) {
+		Tools.createTileset();
 		Main main = new Main();
+		new Map(new int[][]{{1,0,0,1},{1,0,1,0}});
 		main.showMap();
 		for (int i = 0; i < 10; i++)
 			new Figure(r.nextInt(300), r.nextInt(300));

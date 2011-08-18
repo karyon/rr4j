@@ -4,8 +4,6 @@ import javax.swing.JPanel;
 
 
 public class Painter extends JPanel {
-	int[][] data = Tools.parseData("2 5 234 7\n9 23 234 19");
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		/*for (int y = 0; y < data.length; y++) {
@@ -16,5 +14,6 @@ public class Painter extends JPanel {
 			}
 		}*/
 		Figure.paintAll(g);
+		Map.getMap().paintAll(g);
 	}
 }

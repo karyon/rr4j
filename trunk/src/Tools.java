@@ -33,7 +33,7 @@ public class Tools {
 	public static String getWorld(String filename)
 	{	
 		String world="";
-		file = new File("rsc/"+filename);
+		file = new File("res/"+filename);
 		
 		try{
 		
@@ -53,14 +53,17 @@ public class Tools {
 	}
 	
 	public static void createTileset () {
-		
+		tileImages = new Image[10];
 		for (int i=0;i<3;i++){
-			tileImages[i] = Toolkit.getDefaultToolkit().createImage("/rsc/tile"+i+"png");
+			tileImages[i] = Toolkit.getDefaultToolkit().createImage("res/tile"+i+".png");
 		}
-		
-		
-		
 	}
+	
+
+	public static Image[] getTileImages() {
+		return tileImages;
+	}
+	
 	
 	
 }

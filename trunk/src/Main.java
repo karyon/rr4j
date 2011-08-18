@@ -1,13 +1,18 @@
 import java.awt.*;
+import java.util.Random;
+
 import javax.swing.*;
 
 
 public class Main {
 	
+	static Random r = new Random();
 	
 	public static void main(String args[]) {
 		Main main = new Main();
 		main.showMap();
+		for (int i = 0; i < 10; i++)
+			new Figure(r.nextInt(300), r.nextInt(300));
 	}
 	
 	

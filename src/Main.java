@@ -25,7 +25,9 @@ public class Main {
 		frame.setSize(300, 280);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.add(new Painter());
+		Painter p = new Painter();
+		frame.add(p);
+		p.addMouseListener(new Mousehandler());
 	}
 	
 }

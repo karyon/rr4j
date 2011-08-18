@@ -12,7 +12,7 @@ public class Figure
 	private char los; //los = line of sight  (N,E,S,W)
 	
 	Image img = new BufferedImage(20,20, BufferedImage.TYPE_INT_ARGB);
-	final int ID;
+	private final int ID;
 	static int nextID = 0;
 	
 	private static ArrayList<Figure> allFigures = new ArrayList<Figure>();
@@ -45,6 +45,11 @@ public class Figure
 		return los;
 	}
 	
+	public static ArrayList<Figure> getFigureList()
+	{
+		return allFigures;
+	}
+	
 	public void paint(Graphics g) {
 		g.drawImage(img, (int)xPos, (int)yPos, null);
 	}
@@ -52,5 +57,9 @@ public class Figure
 	public static void paintAll(Graphics g) {
 		for (Figure f: allFigures)
 			f.paint(g);
+	}
+	
+	public int getID(){
+		return ID;
 	}
 }

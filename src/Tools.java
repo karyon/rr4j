@@ -7,16 +7,6 @@ import java.awt.Toolkit;
 
 
 public class Tools {
-	private static int tileSize = 64;
-	public static int getTileSize() {
-		return tileSize;
-	}
-
-	public static void setTileSize(int tileSize) {
-		Tools.tileSize = tileSize;
-	}
-
-
 	private static Scanner scanner;
 	private static File file;
 	private static Image[] tileImages;

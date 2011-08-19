@@ -28,11 +28,11 @@ public class Map {
 		Random r = new Random();
 		int type = r.nextInt(3);
 		
-		for(int i=0;i<Tools.getTileSize();i++)
+		for (int i = 0; i < Tile.getSize(); i++) 
 		{
-			for(int j=0;j<Tools.getTileSize();j++)
+			for (int j = 0; j < Tile.getSize(); j++) 
 			{
-				mapFields[i][j] = new Tile(i*Tools.getTileSize(),j*Tools.getTileSize(),type,1);
+				mapFields[i][j] = new Tile(i * Tile.getSize(), j * Tile.getSize(), type, 1);
 			}
 		}
 	}
@@ -42,7 +42,7 @@ public class Map {
 		for (int x = 0; x < mapFields.length; x++) {
 			for (int y = 0; y < mapFields[0].length; y++) {
 				Tile currTile = mapFields[x][y];
-				g.drawImage(Tools.getTileImages()[currTile.getType()], x*Tools.getTileSize(), y*Tools.getTileSize(), null);
+				g.drawImage(Tools.getTileImages()[currTile.getType()], x * Tile.getSize(), y * Tile.getSize(), null);
 			}
 		}
 	}

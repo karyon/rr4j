@@ -1,14 +1,12 @@
 
-public class Tile {
+public class Tile extends GameObject{
 
-	private int x,y;   //Koordinaten
 	private int type;  //Tiel Typ
-	private int  walkable;
-	private int imageID;  
+	private int walkable;
+	private int imageID;
 	
-	public Tile (int xco,  int yco, int typeData, int imgageID){
-		x = xco;
-		y = yco;
+	public Tile (int x,  int y, int typeData, int imgageID){
+		super(x, y);
 		type = typeData;
 		this.imageID = imgageID;
 		
@@ -19,22 +17,6 @@ public class Tile {
 		
 	}
 	
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
 
 	public int getType() {
 		return type;

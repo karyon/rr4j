@@ -12,7 +12,13 @@ public class Mousehandler implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		singleSelect(xPos, yPos);
+		if(arg0.getButton()==1){
+			singleSelect(xPos, yPos);
+		}
+
+		if(arg0.getButton()==3){
+			moveSelected(arg0.getX(),arg0.getY());
+			}
 	}
 
 	@Override
@@ -29,7 +35,9 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		selection = new ArrayList<GameObject>();
+		if(arg0.getButton()==1){
+			selection = new ArrayList<GameObject>();
+		}
 		xPos = arg0.getX();
 		yPos = arg0.getY();
 		
@@ -114,6 +122,16 @@ public class Mousehandler implements MouseListener{
 		System.out.println();
 	}
 	
-	
+	public void moveSelected(int x, int y)
+	{ 		
+		for(GameObject r: selection)
+		{
+			if(r.isTile()==false){
+				((RockRaider)r).move(x-10,y-10);
+				System.out.println("RockRaider(s) "+((RockRaider)r).getID()+ " moved");
+			}
+			
+		}
+	}
 	
 }

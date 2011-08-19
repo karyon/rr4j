@@ -6,13 +6,15 @@ import java.util.ArrayList;
 public class Mousehandler implements MouseListener{
 
 	private static ArrayList<Figure> list;
+	private static ArrayList<Figure> multiChoose=new ArrayList<Figure>(); //for method: allIn
+	private int xPos,yPos;
 	
 	
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		int x = arg0.getX();
-		int y = arg0.getY();
+		double x = arg0.getX();
+		double y = arg0.getY();
 		compare(x,y);
 	}
 
@@ -30,17 +32,22 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		xPos = arg0.getX();
+		yPos = arg0.getY();
+		
 		
 	}
+
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		double x = arg0.getX();
+		double y = arg0.getY();
+		multiSelect(x,y);
 		
 	}
 
-	public void compare(int x, int y)
+	public void compare(double x, double y)
 	{
 		double fX;
 		double fY;
@@ -65,6 +72,29 @@ public class Mousehandler implements MouseListener{
 		
 		
 		
+	}	
+
+	private void multiSelect(double x, double y) {
+		
+		list = Figure.getFigureList();
+		
+		System.out.print("Figures: ");
+		
+		for(Figure f: list)
+		{
+			if(xPos < f.getX() && x > f.getX())
+			{
+				if(yPos < f.getY() && y > f.getY())
+				{
+					multiChoose.add(f);
+					System.out.print(f.getID() + " ");
+					
+				}
+			}
+		}
+		System.out.println();
 	}
+	
+	
 	
 }

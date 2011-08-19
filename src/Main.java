@@ -28,6 +28,13 @@ public class Main {
 		while(isRunning) {
 			doGamePlay((int)(System.currentTimeMillis() - timeOfLastUpdate));
 			frame.repaint();
+			long updateTime  = System.currentTimeMillis() - timeOfLastUpdate; //wie lange das update gebraucht hat
+			updateTime = Math.max(0, updateTime);
+			try {
+				Thread.sleep(1000/FPS - updateTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

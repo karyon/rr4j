@@ -10,7 +10,7 @@ public class Tile extends GameObject{
 	final static int TYPE_STONE = 2;
 	
 	
-	public Tile (int x,  int y, int type, int imgageID){
+	public Tile (int x, int y, int type, int imgageID){
 		super(x, y);
 		this.type = type;
 		this.imageID = imgageID;

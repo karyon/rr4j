@@ -2,18 +2,20 @@
 public class Tile extends GameObject{
 
 	private int type;  //Tiel Typ
-	private int walkable;
+	private boolean walkable;
 	private int imageID;
 	
-	public Tile (int x,  int y, int typeData, int imgageID){
+	final static int TYPE_GROUND = 0;
+	final static int TYPE_WATER = 1;
+	final static int TYPE_STONE = 2;
+	
+	
+	public Tile (int x,  int y, int type, int imgageID){
 		super(x, y);
-		type = typeData;
+		this.type = type;
 		this.imageID = imgageID;
 		
-		switch (type){
-	    default: walkable = 1;
-		break;
-		}
+		walkable = type == TYPE_GROUND;
 		
 	}
 	
@@ -26,12 +28,8 @@ public class Tile extends GameObject{
 		this.type = type;
 	}
 
-	public int getWalkable() {
+	public boolean isWalkable() {
 		return walkable;
-	}
-
-	public void setWalkable(int walkable) {
-		this.walkable = walkable;
 	}
 
 	public int getImageID() {

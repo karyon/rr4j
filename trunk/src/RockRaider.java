@@ -52,4 +52,12 @@ public class RockRaider extends GameObject
 	public int getID(){
 		return ID;
 	}
+	
+	public void move(double newX,double newY){
+		x=newX;
+		y=newY;
+		
+	}
+	
+	
 }

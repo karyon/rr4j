@@ -9,7 +9,7 @@ public class RockRaider extends GameObject
 {
 	private char los; //los = line of sight  (N,E,S,W)
 	
-	private Image img = new BufferedImage(20,20, BufferedImage.TYPE_INT_ARGB);
+	private Image img = new BufferedImage(Tools.getTileSize(),Tools.getTileSize(), BufferedImage.TYPE_INT_ARGB);
 	private final int ID;
 	private static int nextID = 0;
 	

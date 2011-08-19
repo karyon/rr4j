@@ -67,8 +67,8 @@ public class Mousehandler implements MouseListener{
 		for (RockRaider f: list) {
 			double fX = f.getX();
 			double fY = f.getY();
-			if(x>=fX && x<=fX+20) {
-				if(y>=fY && y<=fY+20) {
+			if(x>=fX && x<=fX+Tools.getTileSize()) {
+				if(y>=fY && y<=fY+Tools.getTileSize()) {
 					System.out.println("Figure: " + f.getID());
 					selection.add(f);
 					return;
@@ -82,8 +82,8 @@ public class Mousehandler implements MouseListener{
 			for(Tile t: temp) {
 				double tileX = t.getX();
 				double tileY = t.getY();
-				if(x>=tileX*20 && x<=tileX*20+20) {
-					if(y>=tileY*20 && y<=tileY*20+20) {
+				if(x>=tileX*Tools.getTileSize() && x<=tileX*Tools.getTileSize()+Tools.getTileSize()) {
+					if(y>=tileY*Tools.getTileSize() && y<=tileY*Tools.getTileSize()+Tools.getTileSize()) {
 						selection.add(t);
 						System.out.println("Tile: " + tileX + " " + tileY);
 						return;
@@ -99,8 +99,8 @@ public class Mousehandler implements MouseListener{
 		
 		if(x==xPos && y==yPos)return;
 		
-		int xPos2 = xPos -20; //not only top left corner, also the others
-		int yPos2 = yPos -20; // same as xPos2
+		int xPos2 = xPos -Tools.getTileSize(); //not only top left corner, also the others
+		int yPos2 = yPos -Tools.getTileSize(); // same as xPos2
 		
 		
 		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();

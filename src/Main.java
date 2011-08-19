@@ -40,6 +40,7 @@ public class Main {
 	
 	private static void doGamePlay(int ms) {
 		timeOfLastUpdate = System.currentTimeMillis();
+		RockRaider.updateAll(ms);
 		//do all updates here
 	}
 	

@@ -122,13 +122,13 @@ public class Mousehandler implements MouseListener{
 		System.out.println();
 	}
 	
-	public void moveSelected(int x, int y)
+	public void moveSelected(double x, double y)
 	{ 		
 		for(GameObject r: selection)
 		{
 			if(r.isTile()==false){
-				((RockRaider)r).move(x-10,y-10);
-				System.out.println("RockRaider(s) "+((RockRaider)r).getID()+ " moved");
+				((RockRaider) r).target(x - 10, y - 10);
+				System.out.println("RockRaider(s) " + ((RockRaider)r).getID()+ " moved");
 			}
 			
 		}

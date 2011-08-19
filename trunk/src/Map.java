@@ -11,7 +11,7 @@ public class Map {
 	static Map map;
 	
 	public Map (int [] [] mapData){
-		if (this == null) //SINGLETON!
+		if (map != null) //SINGLETON!
 			throw new RuntimeException();
 		width = mapData.length;
 		height  = mapData[0].length;
@@ -51,6 +51,11 @@ public class Map {
 	
 	public static Map getMap() {
 		return map;
+	}
+	
+	
+	public Tile[][] getMapFields() {
+		return mapFields;
 	}
 	
 	

@@ -39,8 +39,16 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		double x = arg0.getX();
-		double y = arg0.getY();
+		int x = arg0.getX();
+		int y = arg0.getY();
+		if(xPos>x)
+		{ 
+			int d=x; x=xPos; xPos=d; 
+		}
+		if(yPos>y)
+		{ 
+			int d=y; y=yPos; yPos=d; 
+		}
 		multiSelect(x,y);
 		
 	}

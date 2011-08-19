@@ -89,15 +89,21 @@ public class Mousehandler implements MouseListener{
 
 	private void multiSelect(double x, double y) {
 		
+		if(x==xPos && y==yPos)return;
+		
+		int xPos2 = xPos -20; //not only top left corner, also the others
+		int yPos2 = yPos -20; // same as xPos2
+		
+		
 		list = Figure.getFigureList();
 		
 		System.out.print("Figures: ");
 		
 		for(Figure f: list)
 		{
-			if(xPos < f.getX() && x > f.getX())
+			if(xPos2 < f.getX() && x > f.getX())
 			{
-				if(yPos < f.getY() && y > f.getY())
+				if(yPos2 < f.getY() && y > f.getY())
 				{
 					multiChoose.add(f);
 					System.out.print(f.getID() + " ");

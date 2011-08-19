@@ -9,8 +9,9 @@ public class RockRaider extends GameObject
 {
 	private char los; //los = line of sight  (N,E,S,W)
 	private double tarX,tarY;
+	private static final int size = 20;
 	
-	private Image img = new BufferedImage(Tools.getTileSize(),Tools.getTileSize(), BufferedImage.TYPE_INT_ARGB);
+	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 	private final int ID;
 	private static int nextID = 0;
 	
@@ -19,14 +20,14 @@ public class RockRaider extends GameObject
 	
 	public RockRaider(double x,double y)
 	{
-		super(x, y);
+		super(x, y, size, size);
 		tarX=x;
 		tarY=y;
 		ID = nextID;
 		Graphics g = img.getGraphics();
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 63, 63);
-		g.drawString(Integer.toString(ID), 0, 15);
+		g.drawRect(0, 0, size-1, size-1);
+		g.drawString(Integer.toString(ID),5, 15);
 		nextID++;
 		los  = 'S';
 		allRockRaiders.add(this);

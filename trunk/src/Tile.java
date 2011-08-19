@@ -1,9 +1,10 @@
 
 public class Tile extends GameObject{
 
-	private int type;  //Tiel Typ
+	private int type;  //Tile Typ
 	private boolean walkable;
 	private int imageID;
+	private static final int size = 64;
 	
 	final static int TYPE_GROUND = 0;
 	final static int TYPE_WATER = 1;
@@ -11,15 +12,17 @@ public class Tile extends GameObject{
 	
 	
 	public Tile (int x, int y, int type, int imgageID){
-		super(x, y);
+		super(x, y, size, size);
 		this.type = type;
 		this.imageID = imgageID;
 		
 		walkable = type == TYPE_GROUND;
-		
 	}
 	
-
+	
+	public static int getSize() {
+		return size;
+	}
 	public int getType() {
 		return type;
 	}

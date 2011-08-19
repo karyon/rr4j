@@ -1,11 +1,16 @@
 
 public abstract class GameObject {
-	double x;
-	double y;
+	protected double x;
+	protected double y;
 	
-	public GameObject(double x, double y) {
+	private final int width;
+	private final int height;
+	
+	public GameObject(double x, double y, int width, int height) {
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
 	}
 	
 	public double getX() {

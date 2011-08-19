@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
@@ -24,7 +23,7 @@ public class Map {
 		map = this;
 	}
 	
-	public void tileSet()
+	public void createTiles()
 	{
 		Random r = new Random();
 		int type = r.nextInt(3);

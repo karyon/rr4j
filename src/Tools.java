@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +25,6 @@ public class Tools {
 				result[j][i] = Integer.parseInt(lineSplit[j]);
 			}
 		}
-		System.out.println(Arrays.toString(result[0]));
 		return result;
 	}
 	

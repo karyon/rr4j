@@ -1,29 +1,47 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
+import java.util.TimerTask;
 
 import javax.swing.*;
 
 
 public class Main {
-	
-	static Random r = new Random();
+	private static JFrame frame;
+	private static Timer timer;
+	private static final int FPS = 60;
+	private static long timeOfLastUpdate;
+	private static boolean isRunning = true;
 	
 	public static void main(String args[]) {
-		Main main = new Main();
 		Tools.createTileset();
 		new Map(Tools.parseData(Tools.getWorld("testmap.txt")));
+		
+		Random r = new Random();
 		for (int i = 0; i < 10; i++)
 			new RockRaider(r.nextInt(300), r.nextInt(300));
-		main.showMap();
 		
+		createWindowAndPainter();
+		
+		
+		while(isRunning) {
+			doGamePlay((int)(System.currentTimeMillis() - timeOfLastUpdate));
+			frame.repaint();
+		}
+	}
+	
+	private static void doGamePlay(int ms) {
+		timeOfLastUpdate = System.currentTimeMillis();
+		//do all updates here
 	}
 	
 	
-	public void showMap() {
+	public static void createWindowAndPainter() {
 		Painter p = new Painter();
 		p.addMouseListener(new Mousehandler());
 		
-		JFrame frame = new JFrame("Testfenster");
+		frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 280);
@@ -32,5 +50,4 @@ public class Main {
 		frame.setVisible(true);
 		frame.repaint();
 	}
-	
 }

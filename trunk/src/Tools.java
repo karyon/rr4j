@@ -18,12 +18,12 @@ public class Tools {
 		int height = lines.length;
 		int width = lines[0].split(" ").length;
 		
-		int[][] result = new int[lines.length][lines[0].split(" ").length];
+		int[][] result = new int[lines[0].split(" ").length][lines.length];
 		
 		for (int i = 0; i < height; i++) {
 			String[] lineSplit = lines[i].split(" ");
 			for (int j = 0; j < width; j++) {
-				result[i][j] = Integer.parseInt(lineSplit[j]);
+				result[j][i] = Integer.parseInt(lineSplit[j]);
 			}
 		}
 		System.out.println(Arrays.toString(result[0]));

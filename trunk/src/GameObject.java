@@ -21,4 +21,12 @@ public abstract class GameObject {
 		this.y = y;
 	}
 	
+	public boolean isRockRaider() {
+		return this instanceof RockRaider;
+	}
+	
+	public boolean isTile() {
+		return this instanceof Tile;
+	}
+	
 }

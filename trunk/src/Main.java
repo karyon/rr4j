@@ -12,9 +12,8 @@ public class Main {
 		Main main = new Main();
 		Tools.createTileset();
 		new Map(Tools.parseData(Tools.getWorld("testmap.txt")));
-//		new Map(new int[][]{{1,0,0,1},{1,0,1,0}});
 		for (int i = 0; i < 10; i++)
-			new Figure(r.nextInt(300), r.nextInt(300));
+			new RockRaider(r.nextInt(300), r.nextInt(300));
 		main.showMap();
 		
 	}

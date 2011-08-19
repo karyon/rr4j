@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 
 public class Mousehandler implements MouseListener{
-
-	private static ArrayList<Figure> list;
-	private static ArrayList<Figure> multiChoose=new ArrayList<Figure>(); //for method: allIn
+	
+	private static ArrayList<GameObject> selection = new ArrayList<GameObject>(); //for method: allIn
 	private int xPos,yPos;
 	
 	
@@ -30,7 +29,7 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		multiChoose=new ArrayList<Figure>();
+		selection = new ArrayList<GameObject>();
 		xPos = arg0.getX();
 		yPos = arg0.getY();
 		
@@ -56,14 +55,14 @@ public class Mousehandler implements MouseListener{
 	
 	private void singleSelect(int x, int y)
 	{
-		list = Figure.getFigureList();
-		for (Figure f: list) {
+		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
+		for (RockRaider f: list) {
 			double fX = f.getX();
 			double fY = f.getY();
 			if(x>=fX && x<=fX+20) {
 				if(y>=fY && y<=fY+20) {
 					System.out.println("Figure: " + f.getID());
-					multiChoose.add(f);
+					selection.add(f);
 					return;
 				}
 			}
@@ -77,6 +76,7 @@ public class Mousehandler implements MouseListener{
 				double tileY = t.getY();
 				if(x>=tileX*20 && x<=tileX*20+20) {
 					if(y>=tileY*20 && y<=tileY*20+20) {
+						selection.add(t);
 						System.out.println("Tile: " + tileX + " " + tileY);
 						return;
 					}
@@ -95,17 +95,17 @@ public class Mousehandler implements MouseListener{
 		int yPos2 = yPos -20; // same as xPos2
 		
 		
-		list = Figure.getFigureList();
+		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
 		
 		System.out.print("Figures: ");
 		
-		for(Figure f: list)
+		for(RockRaider f: list)
 		{
 			if(xPos2 < f.getX() && x > f.getX())
 			{
 				if(yPos2 < f.getY() && y > f.getY())
 				{
-					multiChoose.add(f);
+					selection.add(f);
 					System.out.print(f.getID() + " ");
 					
 				}

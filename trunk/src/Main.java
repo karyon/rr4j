@@ -9,25 +9,28 @@ public class Main {
 	static Random r = new Random();
 	
 	public static void main(String args[]) {
-		Tools.createTileset();
 		Main main = new Main();
+		Tools.createTileset();
 		new Map(new int[][]{{1,0,0,1},{1,0,1,0}});
-		main.showMap();
 		for (int i = 0; i < 10; i++)
 			new Figure(r.nextInt(300), r.nextInt(300));
+		main.showMap();
+		
 	}
 	
 	
 	public void showMap() {
+		Painter p = new Painter();
+		p.addMouseListener(new Mousehandler());
+		
 		JFrame frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 280);
 		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		Painter p = new Painter();
 		frame.add(p);
-		p.addMouseListener(new Mousehandler());
+		frame.setVisible(true);
+		frame.repaint();
 	}
 	
 }

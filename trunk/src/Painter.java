@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -13,7 +14,8 @@ public class Painter extends JPanel {
 				g.getFont().getSize();
 			}
 		}*/
-		Figure.paintAll(g);
+		System.out.println(Arrays.toString(Map.getMap().getMapFields()));
 		Map.getMap().paintAll(g);
+		Figure.paintAll(g);
 	}
 }

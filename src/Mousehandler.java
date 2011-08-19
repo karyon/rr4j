@@ -13,9 +13,7 @@ public class Mousehandler implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		double x = arg0.getX();
-		double y = arg0.getY();
-		compare(x,y);
+		singleSelect(xPos, yPos);
 	}
 
 	@Override
@@ -32,9 +30,9 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
+		multiChoose=new ArrayList<Figure>();
 		xPos = arg0.getX();
 		yPos = arg0.getY();
-		
 		
 	}
 
@@ -47,29 +45,36 @@ public class Mousehandler implements MouseListener{
 		
 	}
 
-	public void compare(double x, double y)
+	
+	private void singleSelect(int x, int y)
 	{
-		double fX;
-		double fY;
-		
-		System.out.println(x+" "+y);
 		list = Figure.getFigureList();
-		
-		for(int i=0;i<list.size();i++)
-		{
-			fX = list.get(i).getX();
-			fY = list.get(i).getY();
-			if(x>=fX && x<=fX+20)
-			{
-				if(y>=fY && y<=fY+20)
-				{
-					System.out.println("Figure: " + list.get(i).getID());
-					break;
+		for (Figure f: list) {
+			double fX = f.getX();
+			double fY = f.getY();
+			if(x>=fX && x<=fX+20) {
+				if(y>=fY && y<=fY+20) {
+					System.out.println("Figure: " + f.getID());
+					multiChoose.add(f);
+					return;
 				}
 			}
-			
 		}
 		
+		
+		Tile[][] mapFields = Map.getMap().getMapFields();
+		for (Tile[] temp: mapFields) {
+			for(Tile t: temp) {
+				double tileX = t.getX();
+				double tileY = t.getY();
+				if(x>=tileX*20 && x<=tileX*20+20) {
+					if(y>=tileY*20 && y<=tileY*20+20) {
+						System.out.println("Tile: " + tileX + " " + tileY);
+						return;
+					}
+				}
+			}
+		}
 		
 		
 	}	

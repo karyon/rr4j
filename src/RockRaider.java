@@ -72,30 +72,52 @@ public class RockRaider extends GameObject
 	public void update(int ms) {
 		if (tarX == x && tarY == y)
 			return;
-		double distX,distY;
-		double maxMovement=0.1*ms;
-		
-		distX = tarX-x;		
-		distY = tarY-y;
-		if (ID == 0)
-			System.out.println(x + " " + distX + " " + tarX);
-		
-		double distance = Math.sqrt(distX*distX + distY*distY);
-		
-		double v = distance / maxMovement;
-		
-		//Math.abs(distX/v)
+		double distX, distY;
+		double maxMovement = 0.1 * ms;
 
-			
-			
-				x= x + distX/v;
-				y= y + distY/v;
-				if(Math.abs(distX/v) >= Math.abs(distX)) { x= tarX; }
-				if(Math.abs(distY/v) >= Math.abs(distY)) { y= tarY; }
-			
-			
-//		}
+		distX = tarX - x;
+		distY = tarY - y;
+
+		double distance = Math.sqrt(distX * distX + distY * distY);
+
+		double ratio = distance / maxMovement;
+		x += distX / ratio;
+		y += distY / ratio;
 		
+		if (this.intersectsUnpassableObject()) {
+			x -= distX / ratio;
+			y -= distY / ratio;
+			tarX = x;
+			tarY = y;
+			return;
+		}
+		
+		if (Math.abs(distX / ratio) >= Math.abs(distX)) {
+			x = tarX;
+		}
+		if (Math.abs(distY / ratio) >= Math.abs(distY)) {
+			y = tarY;
+		}
+		
+	}
+	
+	
+	public boolean intersectsUnpassableObject() {
+		for (Tile[] temp: Map.getMap().getMapFields()) {
+			for (Tile t: temp) {
+				if (!(t.getType() == Tile.TYPE_STONE || t.getType() == Tile.TYPE_WATER))
+					continue;
+				if (this.intersects(t))
+					return true;
+			}
+		}
+		for (RockRaider r : allRockRaiders) {
+			if (r == this)
+				continue;
+			if (this.intersects(r))
+				return true;
+		}
+		return false;
 	}
 	
 }

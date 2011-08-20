@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.TimerTask;
 
@@ -19,8 +20,14 @@ public class Main {
 		new Map(Tools.parseData(Tools.getWorld("testmap.txt")));
 		
 		Random r = new Random();
-		for (int i = 0; i < 10; i++)
-			new RockRaider(r.nextInt(300), r.nextInt(300));
+		for (int i = 0; i < 10; i++) {
+			new RockRaider(r.nextInt(600), r.nextInt(500));
+			ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
+			if (list.get(list.size()-1).intersectsUnpassableObject()) {
+				list.remove(list.size()-1);
+				i--;
+			}
+		}
 		
 		createWindowAndPainter();
 		

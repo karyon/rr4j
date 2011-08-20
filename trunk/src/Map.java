@@ -17,7 +17,7 @@ public class Map {
 		mapFields = new Tile[width][height];
 		for (int i = 0; i < width; i++){
 			for (int j = 0; j < height; j++){
-				mapFields[i][j]=new Tile(i,j,mapData[i][j],1);
+				mapFields[i][j]=new Tile(i * Tile.getSize(), j * Tile.getSize() ,mapData[i][j],1);
 			}
 		}
 		map = this;

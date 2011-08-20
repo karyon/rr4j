@@ -1,3 +1,5 @@
+import java.awt.Rectangle;
+
 
 public abstract class GameObject {
 	protected double x;
@@ -32,6 +34,13 @@ public abstract class GameObject {
 	
 	public boolean isTile() {
 		return this instanceof Tile;
+	}
+	
+	
+	public boolean intersects (GameObject another) {
+		Rectangle thisRect = new Rectangle((int) x, (int) y, width, height);
+		Rectangle anotherRect = new Rectangle((int) another.x, (int) another.y, another.width, another.height);
+		return thisRect.intersects(anotherRect);
 	}
 	
 }

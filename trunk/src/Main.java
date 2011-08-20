@@ -52,7 +52,7 @@ public class Main {
 		frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(300, 280);
+		frame.setSize(660, 560);
 		frame.setLocationRelativeTo(null);
 		frame.add(p);
 		frame.setVisible(true);

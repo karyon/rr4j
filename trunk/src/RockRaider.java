@@ -12,6 +12,7 @@ public class RockRaider extends GameObject
 	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 	private final int ID;
 	private int moveSpeed = 100; //pixel per second
+	private JobList jobList= new JobList();
 	
 	
 	private static final int size = 20;
@@ -57,6 +58,7 @@ public class RockRaider extends GameObject
 			y -= distY / ratio;
 			tarX = x;
 			tarY = y;
+			jobList.jobDoneCancelNext();
 			return;
 		}
 		
@@ -66,6 +68,8 @@ public class RockRaider extends GameObject
 		if (Math.abs(distY / ratio) >= Math.abs(distY)) {
 			y = tarY;
 		}
+		if (tarX == x && tarY == y)
+			jobList.jobDoneExecuteNext();
 	}
 	
 	
@@ -89,8 +93,17 @@ public class RockRaider extends GameObject
 		return false;
 	}
 	
+	
+	public void goTo(final double x, final double y) {
+		jobList.addJob(new Job() {
+			@Override
+			public void execute() {
+				RockRaider.this.setTarget(x, y);
+			}
+		});
+	}
 
-	public void goTo(double x, double y) {
+	private void setTarget(double x, double y) {
 		tarX = x;
 		tarY = y;
 	}

@@ -9,6 +9,7 @@ public class Tile extends GameObject{
 	final static int TYPE_GROUND = 0;
 	final static int TYPE_WATER = 1;
 	final static int TYPE_STONE = 2;
+	final static int TYPE_RUBBLE = 3;
 	
 	
 	public Tile (int x, int y, int type, int imgageID){
@@ -16,7 +17,7 @@ public class Tile extends GameObject{
 		this.type = type;
 		this.imageID = imgageID;
 		
-		walkable = type == TYPE_GROUND;
+		walkable = type == TYPE_GROUND || type == TYPE_RUBBLE;
 	}
 	
 	
@@ -41,6 +42,19 @@ public class Tile extends GameObject{
 
 	public void setImageID(int imageID) {
 		this.imageID = imageID;
+	}
+
+
+	public void destroy() {
+		switch (type) {
+		case TYPE_STONE:
+			type = TYPE_RUBBLE;
+			walkable = true;
+			break;
+		case TYPE_RUBBLE:
+			type = TYPE_GROUND;
+			break;
+		}
 	}
 
 }

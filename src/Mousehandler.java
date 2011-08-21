@@ -12,13 +12,19 @@ public class Mousehandler implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if(arg0.getButton()==1){
+		
+		if(arg0.getButton() == 1){
 			singleSelect(xPos, yPos);
 		}
-
-		if(arg0.getButton()==3){
-			moveSelected(arg0.getX(),arg0.getY());
-			}
+		else if (arg0.getButton() == 3 && selection.size() == 1 && selection.get(0).isRockRaider()){
+			Tile t = Map.getMap().getMapFields()[arg0.getX()/Tile.getSize()][arg0.getY()/Tile.getSize()];
+			if (t.getType() == Tile.TYPE_STONE)
+				((RockRaider)selection.get(0)).destroy(t);
+			else if (t.getType() == Tile.TYPE_RUBBLE)
+				((RockRaider)selection.get(0)).destroy(t);
+			else
+				moveSelected(arg0.getX(),arg0.getY());
+		}
 	}
 
 	@Override

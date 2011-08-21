@@ -103,11 +103,13 @@ public class RockRaider extends GameObject
 	
 	
 	public boolean intersectsUnpassableObject() {
-		for (Tile[] temp: Map.getMap().getMapFields()) {
-			for (Tile t: temp) {
-				if (!(t.getType() == Tile.TYPE_STONE || t.getType() == Tile.TYPE_WATER))
-					continue;
-				if (this.intersects(t))
+		int tileX = (int)x/Tile.getSize();
+		int tileY = (int)y/Tile.getSize();
+		Tile tiles[][] = Map.getMap().getMapFields();
+		//gehe durch die vier Tiles, die geschnitten werden können
+		for (int x = tileX; x <= tileX + 1 && x < tiles.length; x++) {
+			for (int y = tileY; y <= tileY + 1 && y < tiles[0].length; y++) {
+				if (!tiles[x][y].isWalkable() && this.intersects(tiles[x][y]))
 					return true;
 			}
 		}

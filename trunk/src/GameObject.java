@@ -43,4 +43,12 @@ public abstract class GameObject {
 		return thisRect.intersects(anotherRect);
 	}
 	
+	public boolean intersects(double x, double y) {
+		return (x > this.x && y > this.y && x < this.x + width && y < this.y + height);
+	}
+	
+	public boolean intersects(double x, double y, double width, double height) {
+		return (x > this.x - width && y > this.y - height && x < this.x + this.width && y < this.y + this.height);
+	}
+	
 }

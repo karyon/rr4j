@@ -63,63 +63,27 @@ public class Mousehandler implements MouseListener{
 	
 	private void singleSelect(int x, int y)
 	{
-		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
-		for (RockRaider f: list) {
-			double fX = f.getX();
-			double fY = f.getY();
-			if(x>=fX && x<=fX+Tile.getSize()) {
-				if (y >= fY && y <= fY + Tile.getSize()) {
-					System.out.println("Figure: " + f.getID());
-					selection.add(f);
-					return;
-				}
+		for (RockRaider f: RockRaider.getRockRaiderList()) {
+			if (f.intersects(x, y)) {
+				System.out.println("Figure: " + f.getID());
+				selection.add(f);
+				return;
 			}
 		}
 		
-		
-		Tile[][] mapFields = Map.getMap().getMapFields();
-		for (Tile[] temp: mapFields) {
-			for(Tile t: temp) {
-				double tileX = t.getX();
-				double tileY = t.getY();
-				if (x >= tileX * Tile.getSize() && x <= tileX * Tile.getSize() + Tile.getSize()) {
-					if (y >= tileY * Tile.getSize() && y <= tileY * Tile.getSize() + Tile.getSize()) {
-						selection.add(t);
-						System.out.println("Tile: " + tileX + " " + tileY);
-						return;
-					}
-				}
-			}
-		}
-		
-		
+		//add clicked Tile
+		selection.add(Map.getMap().getMapFields()[x/Tile.getSize()][y/Tile.getSize()]);
 	}	
 
 	private void multiSelect(double x, double y) {
 		
 		if(x==xPos && y==yPos)return;
 		
-		int xPos2 = xPos - Tile.getSize(); //not only top left corner, also the others
-		int yPos2 = yPos - Tile.getSize(); // same as xPos2
-		
-		
-		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
-		
-		System.out.print("Figures: ");
-		
-		for(RockRaider f: list)
-		{
-			if(xPos2 < f.getX() && x > f.getX())
-			{
-				if(yPos2 < f.getY() && y > f.getY())
-				{
-					selection.add(f);
-					System.out.print(f.getID() + " ");
-					
-				}
+		for(RockRaider r: RockRaider.getRockRaiderList()) {
+			if (r.intersects(xPos, yPos, x - xPos, y - yPos)) {
+				selection.add(r);
 			}
 		}
-		System.out.println();
 	}
 	
 	public void moveSelected(double x, double y)
@@ -128,7 +92,6 @@ public class Mousehandler implements MouseListener{
 		{
 			if(r.isTile()==false){
 				((RockRaider) r).target(x - 10, y - 10);
-				System.out.println("RockRaider(s) " + ((RockRaider)r).getID()+ " moved");
 			}
 			
 		}

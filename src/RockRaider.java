@@ -40,7 +40,7 @@ public class RockRaider extends GameObject
 	public void update(int ms) {
 		if (tarX == x && tarY == y)
 			return;
-		double maxMovement = moveSpeed/1000 * ms;
+		double maxMovement = moveSpeed/1000.0 * ms;
 
 		double distX = tarX - x;
 		double distY = tarY - y;

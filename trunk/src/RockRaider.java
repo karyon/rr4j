@@ -133,5 +133,30 @@ public class RockRaider extends GameObject
 		for (RockRaider f : allRockRaiders)
 			f.update(ms);
 	}
+
+
+	public void destroy(final Tile t) {
+		switch (t.getType()) {
+		case Tile.TYPE_STONE:
+			if (x < t.x - size)
+				goTo(t.x - size-2, t.y + 21);
+			else if (x > t.x + Tile.getSize())
+				goTo(t.x + Tile.getSize()+2, t.y + 21);
+			else 
+				goTo(t.x + 20, (y < t.y) ?  t.y - size - 2 : t.y + Tile.getSize() + 2);
+			break;
+		case Tile.TYPE_RUBBLE:
+			goTo(t.x + 10, t.y + 10);
+			break;
+		default: return;
+		}
+		jobList.addJob(new Job(){
+			@Override
+			public void execute() {
+				t.destroy();
+				jobList.jobDoneExecuteNext();
+			}
+		});
+	}
 	
 }

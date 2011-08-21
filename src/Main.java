@@ -1,37 +1,32 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
-
 import javax.swing.*;
 
 
 public class Main {
 	private static JFrame frame;
-	private static Timer timer;
 	private static final int FPS = 60;
 	private static long timeOfLastUpdate;
 	private static boolean isRunning = true;
 	
 	public static void main(String args[]) {
 		Tools.createTileset();
-		new Map(Tools.parseData(Tools.getWorld("testmap.txt")));
+		new Map(Tools.parseData(Tools.loadFile("testmap.txt")));
 		
 		Random r = new Random();
+		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
 		for (int i = 0; i < 10; i++) {
-			new RockRaider(r.nextInt(600), r.nextInt(500));
-			ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
+			new RockRaider(r.nextInt(Map.getMap().getWidthPx() - 20), r.nextInt(Map.getMap().getHeightPx() - 20));
 			if (list.get(list.size()-1).intersectsUnpassableObject()) {
 				list.remove(list.size()-1);
 				i--;
 			}
-		}
 		
+		}
 		createWindowAndPainter();
 		
-		
+		timeOfLastUpdate = System.currentTimeMillis() - 16;
 		while(isRunning) {
 			doGamePlay((int)(System.currentTimeMillis() - timeOfLastUpdate));
 			frame.repaint();

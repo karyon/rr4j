@@ -91,7 +91,7 @@ public class Mousehandler implements MouseListener{
 		for(GameObject r: selection)
 		{
 			if(r.isTile()==false){
-				((RockRaider) r).target(x - 10, y - 10);
+				((RockRaider) r).goTo(x - 10, y - 10);
 			}
 			
 		}

@@ -9,20 +9,23 @@ public class RockRaider extends GameObject
 {
 	private char los; //los = line of sight  (N,E,S,W)
 	private double tarX,tarY;
-	private static final int size = 20;
-	
 	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 	private final int ID;
+	private int moveSpeed = 100; //pixel per second
+	
+	
+	private static final int size = 20;
+	
 	private static int nextID = 0;
 	
 	private static ArrayList<RockRaider> allRockRaiders = new ArrayList<RockRaider>();
 	
 	
-	public RockRaider(double x,double y)
+	public RockRaider(double x, double y)
 	{
 		super(x, y, size, size);
-		tarX=x;
-		tarY=y;
+		tarX = x;
+		tarY = y;
 		ID = nextID;
 		Graphics g = img.getGraphics();
 		g.setColor(Color.BLACK);
@@ -34,49 +37,13 @@ public class RockRaider extends GameObject
 	}
 	
 	
-	public char getLoS()
-	{
-		return los;
-	}
-	
-	public static ArrayList<RockRaider> getRockRaiderList()
-	{
-		return allRockRaiders;
-	}
-	
-	public void paint(Graphics g) {
-		g.drawImage(img, (int)x, (int)y, null);
-	}
-	
-	public static void paintAll(Graphics g) {
-		for (RockRaider f: allRockRaiders)
-			f.paint(g);
-	}
-	
-	public int getID(){
-		return ID;
-	}
-	
-	public void target(double newX,double newY) {	
-		tarX=newX;
-		tarY=newY;
-		
-	}
-	
-	public static void updateAll(int ms) {
-		for (RockRaider f: allRockRaiders)
-			f.update(ms);
-		
-	}
-	
 	public void update(int ms) {
 		if (tarX == x && tarY == y)
 			return;
-		double distX, distY;
-		double maxMovement = 0.1 * ms;
+		double maxMovement = moveSpeed/1000 * ms;
 
-		distX = tarX - x;
-		distY = tarY - y;
+		double distX = tarX - x;
+		double distY = tarY - y;
 
 		double distance = Math.sqrt(distX * distX + distY * distY);
 
@@ -85,6 +52,7 @@ public class RockRaider extends GameObject
 		y += distY / ratio;
 		
 		if (this.intersectsUnpassableObject()) {
+			// one step back, then stop.
 			x -= distX / ratio;
 			y -= distY / ratio;
 			tarX = x;
@@ -98,7 +66,6 @@ public class RockRaider extends GameObject
 		if (Math.abs(distY / ratio) >= Math.abs(distY)) {
 			y = tarY;
 		}
-		
 	}
 	
 	
@@ -120,6 +87,38 @@ public class RockRaider extends GameObject
 				return true;
 		}
 		return false;
+	}
+	
+
+	public void goTo(double x, double y) {
+		tarX = x;
+		tarY = y;
+	}
+
+	public char getLoS() {
+		return los;
+	}
+	
+	public int getID() {
+		return ID;
+	}
+	
+	public void paint(Graphics g) {
+		g.drawImage(img, (int) x, (int) y, null);
+	}
+	
+	public static ArrayList<RockRaider> getRockRaiderList() {
+		return allRockRaiders;
+	}
+
+	public static void paintAll(Graphics g) {
+		for (RockRaider f : allRockRaiders)
+			f.paint(g);
+	}
+
+	public static void updateAll(int ms) {
+		for (RockRaider f : allRockRaiders)
+			f.update(ms);
 	}
 	
 }

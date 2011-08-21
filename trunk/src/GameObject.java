@@ -38,9 +38,7 @@ public abstract class GameObject {
 	
 	
 	public boolean intersects (GameObject another) {
-		Rectangle thisRect = new Rectangle((int) x, (int) y, width, height);
-		Rectangle anotherRect = new Rectangle((int) another.x, (int) another.y, another.width, another.height);
-		return thisRect.intersects(anotherRect);
+		return this.intersects(another.x, another.y, another.width, another.height);
 	}
 	
 	public boolean intersects(double x, double y) {

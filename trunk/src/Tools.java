@@ -27,7 +27,7 @@ public class Tools {
 		return result;
 	}
 	
-	public static String getWorld(String filename)
+	public static String loadFile(String filename)
 	{	
 		String world="";
 		file = new File("res/"+filename);

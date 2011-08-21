@@ -7,7 +7,7 @@ public class Map {
 	private Tile[][] mapFields;
 	private int width, height;
 	
-	static Map map;
+	private static Map map;
 	
 	public Map (int [] [] mapData){
 		if (map != null) //SINGLETON!
@@ -52,10 +52,16 @@ public class Map {
 		return map;
 	}
 	
-	
 	public Tile[][] getMapFields() {
 		return mapFields;
 	}
 	
+	public int getWidthPx() {
+		return width * Tile.getSize();
+	}
+	
+	public int getHeightPx() {
+		return height * Tile.getSize();
+	}
 	
 }

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class RockRaider extends GameObject
 {
-	private char los; //los = line of sight  (N,E,S,W)
 	
 	/** The target coordinates this RockRaider is moving to. 
 	 * Equal to x and y if this RockRaider is not moving. */
@@ -38,6 +37,7 @@ public class RockRaider extends GameObject
 	
 	/** A list of all existing RockRaiders. */
 	private static ArrayList<RockRaider> allRockRaiders = new ArrayList<RockRaider>();
+
 	
 	
 	public RockRaider(double x, double y)
@@ -51,7 +51,7 @@ public class RockRaider extends GameObject
 		g.drawRect(0, 0, size-1, size-1);
 		g.drawString(Integer.toString(ID),5, 15);
 		nextID++;
-		los  = 'S';
+		
 		allRockRaiders.add(this);
 	}
 	
@@ -73,13 +73,14 @@ public class RockRaider extends GameObject
 		x += distX / ratio;
 		y += distY / ratio;
 		
-		if (this.intersectsUnpassableObject()) {
+		
+		if (this.intersectsUnpassableObject()!=null) {
+			
+			GameObject unpassableObject = this.intersectsUnpassableObject();
 			// one step back, then stop.
 			x -= distX / ratio;
 			y -= distY / ratio;
-			tarX = x;
-			tarY = y;
-			jobList.jobDoneCancelNext();
+			findPath(unpassableObject,ratio);
 			return;
 		}
 		
@@ -98,7 +99,8 @@ public class RockRaider extends GameObject
 	 * such as other RockRaiders, Water etc.
 	 * @return true if this RockRaider intersects an unpassable object.
 	 */
-	public boolean intersectsUnpassableObject() {
+	public GameObject intersectsUnpassableObject() {
+		
 		int tileX = (int)x/Tile.getSize();
 		int tileY = (int)y/Tile.getSize();
 		Tile tiles[][] = Map.getMap().getMapFields();
@@ -106,16 +108,26 @@ public class RockRaider extends GameObject
 		for (int x = tileX; x <= tileX + 1 && x < tiles.length; x++) {
 			for (int y = tileY; y <= tileY + 1 && y < tiles[0].length; y++) {
 				if (!tiles[x][y].isWalkable() && this.intersects(tiles[x][y]))
-					return true;
+					return tiles[x][y];
 			}
 		}
 		for (RockRaider r : allRockRaiders) {
 			if (r == this)
 				continue;
 			if (this.intersects(r))
-				return true;
+				return r;
 		}
-		return false;
+		
+		ArrayList<Building> building = Building.getBuildingList();
+		for (Building b: building){
+			
+			if(this.intersects(b)){
+				return b;
+			}
+		}
+		
+		return null;
+		
 	}
 	
 	/**
@@ -136,10 +148,6 @@ public class RockRaider extends GameObject
 	private void setTarget(double x, double y) {
 		tarX = x;
 		tarY = y;
-	}
-
-	public char getLoS() {
-		return los;
 	}
 	
 	public int getID() {
@@ -196,5 +204,26 @@ public class RockRaider extends GameObject
 			}
 		});
 	}
+	
+	public void findPath(GameObject object, double ratio) {
+		
+		
+		
+		
+		/*if(object.isRockRaider()) {
+			
+			double otherX = object.getX();
+			double otherY = object.getY();
+			
+						
+			
+		}*/
+		//else{
+			tarX = x;
+			tarY = y;
+			jobList.jobDoneCancelNext();
+		//}
+		
+	} 
 	
 }

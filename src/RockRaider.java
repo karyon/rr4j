@@ -60,6 +60,15 @@ public class RockRaider extends GameObject
 	 * @param ms
 	 */
 	public void update(int ms) {
+		if (timer > 0) {
+			timer -= ms;
+			if (timer < 0) {
+				timer = 0;
+				jobList.jobDoneExecuteNext();
+			}
+			return;
+		}
+			
 		if (tarX == x && tarY == y)
 			return;
 		double maxMovement = moveSpeed/1000.0 * ms;
@@ -136,7 +145,7 @@ public class RockRaider extends GameObject
 	 * @param x
 	 * @param y
 	 */
-	public void goTo(final double x, final double y) {
+	public void goToJob(final double x, final double y) {
 		jobList.addJob(new Job() {
 			@Override
 			public void execute() {
@@ -144,10 +153,23 @@ public class RockRaider extends GameObject
 			}
 		});
 	}
+	
+	public void waitJob(final int ms) {
+		jobList.addJob(new Job() {
+			@Override
+			public void execute() {
+				setTimer(ms);
+			}
+		});
+	}
 
 	private void setTarget(double x, double y) {
 		tarX = x;
 		tarY = y;
+	}
+	
+	private void setTimer(int ms) {
+		timer = ms;
 	}
 	
 	public int getID() {
@@ -178,25 +200,30 @@ public class RockRaider extends GameObject
 	 * goTo the specified Tile, the second one destroys that Tile.
 	 * @param t The Tile this RockRaider should goTo and destroy.
 	 */
-	public void destroy(final Tile t) {
+	public void goToAndDestroy(Tile t) {
 		jobList.cancelAll();
 		//goTo the Tile t
 		switch (t.getType()) {
 		case Tile.TYPE_STONE:
 			if (x < t.x - size)
-				goTo(t.x - size-2, t.y + 21);
+				goToJob(t.x - size-2, t.y + 21);
 			else if (x > t.x + Tile.getSize())
-				goTo(t.x + Tile.getSize()+2, t.y + 21);
+				goToJob(t.x + Tile.getSize()+2, t.y + 21);
 			else 
-				goTo(t.x + 20, (y < t.y) ?  t.y - size - 2 : t.y + Tile.getSize() + 2);
+				goToJob(t.x + 20, (y < t.y) ?  t.y - size - 2 : t.y + Tile.getSize() + 2);
 			break;
 		case Tile.TYPE_RUBBLE:
-			goTo(t.x + 10, t.y + 10);
+			goToJob(t.x + 10, t.y + 10);
 			break;
 		default: return;
 		}
+		waitJob(500);
 		//new Job: destroy t
-		jobList.addJob(new Job(){
+		destroy(t);
+	}
+	
+	private void destroy(final Tile t) {
+		jobList.addJob(new Job() {
 			@Override
 			public void execute() {
 				t.destroy();

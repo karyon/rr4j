@@ -1,3 +1,5 @@
+import java.util.Random;
+
 
 public class Tile extends GameObject{
 
@@ -52,7 +54,11 @@ public class Tile extends GameObject{
 			walkable = true;
 			break;
 		case TYPE_RUBBLE:
+			Random r = new Random();
 			type = TYPE_GROUND;
+			//one crystal and one ore on random locations
+			new Ore(x + r.nextInt(getSize()-Ore.getSize()), y + r.nextInt(getSize()-Ore.getSize()));
+			new Crystal(x + r.nextInt(getSize()-Crystal.getSize()), y + r.nextInt(getSize()-Crystal.getSize()));
 			break;
 		}
 	}

@@ -13,6 +13,7 @@ public class RockRaider extends GameObject
 	private final int ID;
 	private int moveSpeed = 100; //pixel per second
 	private JobList jobList= new JobList();
+	private int timer = 0;
 	
 	
 	private static final int size = 20;
@@ -77,7 +78,7 @@ public class RockRaider extends GameObject
 		int tileX = (int)x/Tile.getSize();
 		int tileY = (int)y/Tile.getSize();
 		Tile tiles[][] = Map.getMap().getMapFields();
-		//gehe durch die vier Tiles, die geschnitten werden können
+		//gehe durch die vier Tiles, die geschnitten werden kï¿½nnen
 		for (int x = tileX; x <= tileX + 1 && x < tiles.length; x++) {
 			for (int y = tileY; y <= tileY + 1 && y < tiles[0].length; y++) {
 				if (!tiles[x][y].isWalkable() && this.intersects(tiles[x][y]))

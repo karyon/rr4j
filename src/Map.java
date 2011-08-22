@@ -1,6 +1,4 @@
 import java.awt.Graphics;
-import java.util.Random;
-
 
 
 public class Map {
@@ -9,9 +7,7 @@ public class Map {
 	
 	private static Map map;
 	
-	public Map (int [] [] mapData){
-		if (map != null) //SINGLETON!
-			throw new RuntimeException();
+	private Map (int[][] mapData){
 		width = mapData.length;
 		height  = mapData[0].length;
 		mapFields = new Tile[width][height];
@@ -20,33 +16,29 @@ public class Map {
 				mapFields[i][j]=new Tile(i * Tile.getSize(), j * Tile.getSize() ,mapData[i][j],1);
 			}
 		}
-		map = this;
-	}
-	
-	public void createTiles()
-	{
-		Random r = new Random();
-		int type = r.nextInt(3);
-		
-		for (int i = 0; i < Tile.getSize(); i++) 
-		{
-			for (int j = 0; j < Tile.getSize(); j++) 
-			{
-				mapFields[i][j] = new Tile(i * Tile.getSize(), j * Tile.getSize(), type, 1);
-			}
-		}
 	}
 	
 	
 	public void paintAll(Graphics g) {
+		int tileSize = Tile.getSize();
 		for (int x = 0; x < mapFields.length; x++) {
 			for (int y = 0; y < mapFields[0].length; y++) {
 				Tile currTile = mapFields[x][y];
-				g.drawImage(Tools.getTileImages()[currTile.getType()], x * Tile.getSize(), y * Tile.getSize(), null);
+				g.drawImage(Tools.getTileImages()[currTile.getType()], x * tileSize, y * tileSize, null);
 			}
 		}
 	}
 	
+	
+	public Tile getTileAt(double x, double y) {
+		return getMapFields()[(int) x / Tile.getSize()][(int) y / Tile.getSize()];
+	}
+	
+	public static void createMap(int[][] mapData) {
+		if (map != null)
+			return;
+		map = new Map(mapData);
+	}
 	
 	public static Map getMap() {
 		return map;

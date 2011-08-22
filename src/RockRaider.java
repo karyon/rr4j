@@ -8,18 +8,35 @@ import java.util.ArrayList;
 public class RockRaider extends GameObject
 {
 	private char los; //los = line of sight  (N,E,S,W)
+	
+	/** The target coordinates this RockRaider is moving to. 
+	 * Equal to x and y if this RockRaider is not moving. */
 	private double tarX,tarY;
+	
+	/** The image of this RockRaider. */
 	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+	
+	/** ID of this RockRaider. Each RockRaider has a unique ID. */
 	private final int ID;
-	private int moveSpeed = 100; //pixel per second
+	
+	/** Maximum speed in pixel per second. */
+	private int moveSpeed = 100;
+	
+	/** List of all jobs this RockRaider has to execute. jobList.get(0) (if it exists) is the currently active one. */
 	private JobList jobList= new JobList();
+	
+	/** unused. */
 	private int timer = 0;
 	
 	
+	
+	/** Width and height of all RockRaiders. */
 	private static final int size = 20;
 	
+	/** The next unused ID. */
 	private static int nextID = 0;
 	
+	/** A list of all existing RockRaiders. */
 	private static ArrayList<RockRaider> allRockRaiders = new ArrayList<RockRaider>();
 	
 	
@@ -38,7 +55,10 @@ public class RockRaider extends GameObject
 		allRockRaiders.add(this);
 	}
 	
-	
+	/**
+	 * Moves this RockRaider by the specified time.
+	 * @param ms
+	 */
 	public void update(int ms) {
 		if (tarX == x && tarY == y)
 			return;
@@ -73,7 +93,11 @@ public class RockRaider extends GameObject
 			jobList.jobDoneExecuteNext();
 	}
 	
-	
+	/**
+	 * Checks if this RockRaider intersects an Object he cannot pass,
+	 * such as other RockRaiders, Water etc.
+	 * @return true if this RockRaider intersects an unpassable object.
+	 */
 	public boolean intersectsUnpassableObject() {
 		int tileX = (int)x/Tile.getSize();
 		int tileY = (int)y/Tile.getSize();
@@ -94,7 +118,12 @@ public class RockRaider extends GameObject
 		return false;
 	}
 	
-	
+	/**
+	 * Adds a new Job to jobList, which sets the target of this 
+	 * RockRaider to the specified coordinates. 
+	 * @param x
+	 * @param y
+	 */
 	public void goTo(final double x, final double y) {
 		jobList.addJob(new Job() {
 			@Override
@@ -135,8 +164,15 @@ public class RockRaider extends GameObject
 			f.update(ms);
 	}
 
-
+	
+	/**
+	 * Adds two Jobs to jobList: the first one lets this RockRaider 
+	 * goTo the specified Tile, the second one destroys that Tile.
+	 * @param t The Tile this RockRaider should goTo and destroy.
+	 */
 	public void destroy(final Tile t) {
+		jobList.cancelAll();
+		//goTo the Tile t
 		switch (t.getType()) {
 		case Tile.TYPE_STONE:
 			if (x < t.x - size)
@@ -151,6 +187,7 @@ public class RockRaider extends GameObject
 			break;
 		default: return;
 		}
+		//new Job: destroy t
 		jobList.addJob(new Job(){
 			@Override
 			public void execute() {

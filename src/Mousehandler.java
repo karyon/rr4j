@@ -5,7 +5,14 @@ import java.util.ArrayList;
 
 public class Mousehandler implements MouseListener{
 	
-	private static ArrayList<GameObject> selection = new ArrayList<GameObject>(); //for method: allIn
+	/**
+	 * Currently selected objects.
+	 */
+	private static ArrayList<GameObject> selection = new ArrayList<GameObject>();
+	/**
+	 * Coordinates of the last press of a mouse button. May be changed to
+	 * the coordinates of the upper left corner of the selection-rectangle.
+	 */
 	private int xPos,yPos;
 	
 	
@@ -13,18 +20,16 @@ public class Mousehandler implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		
-		if(arg0.getButton() == 1){
+		if(arg0.getButton() == 1)
 			singleSelect(xPos, yPos);
-		}
 		else if (arg0.getButton() == 3 && selection.size() == 1 && selection.get(0).isRockRaider()){
-			Tile t = Map.getMap().getMapFields()[arg0.getX()/Tile.getSize()][arg0.getY()/Tile.getSize()];
+			Tile t = Map.getMap().getTileAt(arg0.getX(), arg0.getY());
 			if (t.getType() == Tile.TYPE_STONE)
 				((RockRaider)selection.get(0)).destroy(t);
 			else if (t.getType() == Tile.TYPE_RUBBLE)
 				((RockRaider)selection.get(0)).destroy(t);
-			else {
+			else
 				moveSelected(arg0.getX(),arg0.getY());
-			}
 		}
 		else
 			moveSelected(arg0.getX(),arg0.getY());
@@ -44,12 +49,11 @@ public class Mousehandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		if(arg0.getButton()==1){
+		if (arg0.getButton() == 1) {
 			selection = new ArrayList<GameObject>();
 		}
 		xPos = arg0.getX();
 		yPos = arg0.getY();
-		
 	}
 
 
@@ -69,42 +73,52 @@ public class Mousehandler implements MouseListener{
 		
 	}
 
-	
+	/**
+	 * Selects the GameObject at the specified coordinates.
+	 * @param x
+	 * @param y
+	 */
 	private void singleSelect(int x, int y)
 	{
 		for (RockRaider f: RockRaider.getRockRaiderList()) {
 			if (f.intersects(x, y)) {
-				System.out.println("Figure: " + f.getID());
 				selection.add(f);
 				return;
 			}
 		}
 		
 		//add clicked Tile
-		selection.add(Map.getMap().getMapFields()[x/Tile.getSize()][y/Tile.getSize()]);
+		selection.add(Map.getMap().getTileAt(x, y));
 	}	
-
+	
+	/**
+	 * Selects all RockRaiders in the rectangle from x/y to xPos/yPos
+	 * @param x
+	 * @param y
+	 */
 	private void multiSelect(double x, double y) {
 		
-		if(x==xPos && y==yPos)return;
-		
+		if (x == xPos && y == yPos)
+			return;
+
 		for(RockRaider r: RockRaider.getRockRaiderList()) {
 			if (r.intersects(xPos, yPos, x - xPos, y - yPos)) {
-				
 				selection.add(r);
 			}
 		}
 	}
 	
+	/**
+	 * Moves all selected RockRaiders to the specified position.
+	 * @param x
+	 * @param y
+	 */
 	public void moveSelected(double x, double y)
 	{ 		
-		for(GameObject r: selection)
-		{
-			if(r.isTile()==false){
+		for(GameObject r: selection) {
+			if(r.isRockRaider()) {
 				((RockRaider) r).goTo(x - 10, y - 10);
-				System.out.println(((RockRaider)r).getID());
 			}
-			
 		}
 	}
 	

@@ -18,6 +18,10 @@ public class JobList {
 	}
 	
 	public void jobDoneCancelNext() {
-		list = new ArrayList<Job>();
+		list.clear();
+	}
+	
+	public void cancelAll() {
+		list.clear();
 	}
 }

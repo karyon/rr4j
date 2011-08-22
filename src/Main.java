@@ -12,12 +12,13 @@ public class Main {
 	
 	public static void main(String args[]) {
 		Tools.createTileset();
-		new Map(Tools.parseData(Tools.loadFile("testmap.txt")));
+		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
 		
 		Random r = new Random();
 		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();
 		for (int i = 0; i < 10; i++) {
 			new RockRaider(r.nextInt(Map.getMap().getWidthPx() - 20), r.nextInt(Map.getMap().getHeightPx() - 20));
+			//remove the created RockRaider if it... intersects an unpassable object
 			if (list.get(list.size()-1).intersectsUnpassableObject()) {
 				list.remove(list.size()-1);
 				i--;
@@ -42,8 +43,8 @@ public class Main {
 	
 	private static void doGamePlay(int ms) {
 		timeOfLastUpdate = System.currentTimeMillis();
-		RockRaider.updateAll(ms);
 		//do all updates here
+		RockRaider.updateAll(ms);
 	}
 	
 	

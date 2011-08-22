@@ -18,7 +18,7 @@ public class Main {
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
 		width = Map.getMap().getWidthPx();
 		height = Map.getMap().getHeightPx();
-		new Building(3*Tile.getSize(),Tile.getSize());
+		new Building(3*Tile.getSize(),Tile.getSize(),1);
 		
 		Random r = new Random();
 		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();

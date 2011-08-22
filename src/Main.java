@@ -57,6 +57,7 @@ public class Main {
 	
 	public static void createWindowAndPainter() {
 		Painter p = new Painter();
+	
 		p.addMouseListener(new Mousehandler());
 		p.setPreferredSize(new Dimension(width, height));
 		
@@ -68,6 +69,7 @@ public class Main {
 		frame.pack();
 		frame.setVisible(true);
 		frame.repaint();
+		frame.addKeyListener(new KeyHandler());
 	}
 	
 	

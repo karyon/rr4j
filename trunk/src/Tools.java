@@ -7,9 +7,19 @@ import java.awt.Toolkit;
 
 
 public class Tools {
-	private static Scanner scanner;
-	private static File file;
+	/**
+	 * Contains all images from the res-directory 
+	 * with the filenames tile0, tile1 etc.
+	 */
 	private static Image[] tileImages;
+	
+	
+	/**
+	 * Splits the specified String around spaces and new Lines into a new int[][].
+	 * Example: input "1 2 3\n4 5 6" returns {1,2},{3,4}{4,5}.
+	 * @param input
+	 * @return
+	 */
 	public static int[][] parseData(String input) {
 		String[] lines = input.split("\n");
 		
@@ -27,14 +37,19 @@ public class Tools {
 		return result;
 	}
 	
+	/**
+	 * Returns the contents of the specified File in a String.
+	 * @param filename
+	 * @return
+	 */
 	public static String loadFile(String filename)
 	{	
 		String world="";
-		file = new File("res/"+filename);
+		File file = new File("res/"+filename);
 		
 		try{
 		
-			scanner = new Scanner(file); 
+			Scanner scanner = new Scanner(file); 
 			while(scanner.hasNext())
 			{
 				world= world + scanner.nextLine()+"\n";
@@ -49,6 +64,10 @@ public class Tools {
 		return world;
 	}
 	
+	/**
+	 * Loads all images from the res-directory  with the 
+	 * filenames tile0, tile1 etc. into tileImages
+	 */
 	public static void createTileset () {
 		tileImages = new Image[10];
 		for (int i=0;i<4;i++){

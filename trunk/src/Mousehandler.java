@@ -25,9 +25,9 @@ public class Mousehandler implements MouseListener{
 		else if (arg0.getButton() == 3 && selection.size() == 1 && selection.get(0).isRockRaider()){
 			Tile t = Map.getMap().getTileAt(arg0.getX(), arg0.getY());
 			if (t.getType() == Tile.TYPE_STONE)
-				((RockRaider)selection.get(0)).destroy(t);
+				((RockRaider)selection.get(0)).goToAndDestroy(t);
 			else if (t.getType() == Tile.TYPE_RUBBLE)
-				((RockRaider)selection.get(0)).destroy(t);
+				((RockRaider)selection.get(0)).goToAndDestroy(t);
 			else
 				moveSelected(arg0.getX(),arg0.getY());
 		}
@@ -117,7 +117,7 @@ public class Mousehandler implements MouseListener{
 	{ 		
 		for(GameObject r: selection) {
 			if(r.isRockRaider()) {
-				((RockRaider) r).goTo(x - 10, y - 10);
+				((RockRaider) r).goToJob(x - 10, y - 10);
 			}
 		}
 	}

@@ -8,5 +8,7 @@ public class Painter extends JPanel {
 		Map.getMap().paintAll(g);
 		Building.paintAll(g);
 		RockRaider.paintAll(g);
+		Ore.paintAll(g);
+		Crystal.paintAll(g);
 	}
 }

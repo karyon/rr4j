@@ -1,8 +1,11 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 
 
 
@@ -12,6 +15,14 @@ public class Tools {
 	 * with the filenames tile0, tile1 etc.
 	 */
 	private static Image[] tileImages;
+	
+	private static Image rockRaiderImage;
+	
+	private static Image buildingImage;
+	
+	private static Image oreImage;
+	
+	private static Image crystalImage;
 	
 	
 	/**
@@ -75,10 +86,54 @@ public class Tools {
 		}
 	}
 	
+	
+	public static void createImages() {
+		rockRaiderImage = new BufferedImage(RockRaider.getSize(), RockRaider.getSize(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = rockRaiderImage.getGraphics();
+		g.setColor(Color.BLACK);
+		g.drawRect(0, 0, RockRaider.getSize()-1, RockRaider.getSize()-1);
+		g.drawString("R",5, 15);
+		
+		buildingImage =  new BufferedImage(Building.getSize(), Building.getSize(), BufferedImage.TYPE_INT_ARGB);
+		g = buildingImage.getGraphics();
+		g.setColor(new Color(240,170,170));
+		g.fillRect(0, 0, Building.getSize()-1, Building.getSize()-1);
+		g.setColor(Color.BLACK);
+		g.drawString("Building",5, 15);
+		
+		oreImage =  new BufferedImage(Ore.getSize(), Ore.getSize(), BufferedImage.TYPE_INT_ARGB);
+		g = oreImage.getGraphics();
+		g.setColor(new Color(30, 16, 5));
+		g.fillRect(0, 0, Ore.getSize()-1, Ore.getSize()-1);
+		
+		crystalImage = new BufferedImage(Crystal.getSize(), Crystal.getSize(), BufferedImage.TYPE_INT_ARGB);
+		g = crystalImage.getGraphics();
+		g.setColor(new Color(30, 230, 7));
+		g.fillRect(0, 0, Crystal.getSize()-1, Crystal.getSize()-1);
+	}
+	
 
 	public static Image[] getTileImages() {
 		return tileImages;
 	}
+	
+	public static Image getRockRaiderImage() {
+		return rockRaiderImage;
+	}
+
+	public static Image getBuildingImage() {
+		return buildingImage;
+	}
+
+	public static Image getOreImage() {
+		return oreImage;
+	}
+
+	public static Image getCrystalImage() {
+		return crystalImage;
+	}
+
+
 	
 	
 	

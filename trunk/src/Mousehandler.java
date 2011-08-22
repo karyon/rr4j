@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -143,16 +141,14 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		
 	}
 	
-	
-	public static void paintDragRect(Graphics g) {
+	public static int[] getSelectionRect() {
 		if (!drawSelectionRect)
-			return;
-		g.setColor(Color.WHITE);
+			return null;
 		int startX = (mousePressedX < mouseCurrX) ? mousePressedX : mouseCurrX;
 		int startY = (mousePressedY < mouseCurrY) ? mousePressedY : mouseCurrY;
 		int width = (mousePressedX >= mouseCurrX) ? mousePressedX - startX: mouseCurrX - startX;
 		int height = (mousePressedY >= mouseCurrY) ? mousePressedY - startY: mouseCurrY - startY;
-		g.drawRect(startX, startY, width, height);
+		return new int[] {startX, startY, width, height};
 	}
 	
 }

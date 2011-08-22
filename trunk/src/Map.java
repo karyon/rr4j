@@ -1,5 +1,3 @@
-import java.awt.Graphics;
-
 
 public class Map {
 	private Tile[][] mapFields;
@@ -17,18 +15,6 @@ public class Map {
 			}
 		}
 	}
-	
-	
-	public void paintAll(Graphics g) {
-		int tileSize = Tile.getSize();
-		for (int x = 0; x < mapFields.length; x++) {
-			for (int y = 0; y < mapFields[0].length; y++) {
-				Tile currTile = mapFields[x][y];
-				g.drawImage(Tools.getTileImages()[currTile.getType()], x * tileSize, y * tileSize, null);
-			}
-		}
-	}
-	
 	
 	public Tile getTileAt(double x, double y) {
 		return getMapFields()[(int) x / Tile.getSize()][(int) y / Tile.getSize()];

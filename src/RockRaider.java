@@ -51,8 +51,14 @@ public class RockRaider extends GameObject
 		g.drawRect(0, 0, size-1, size-1);
 		g.drawString(Integer.toString(ID),5, 15);
 		nextID++;
-		
 		allRockRaiders.add(this);
+		
+		abilities = new boolean[4]; 
+		abilities[0]=true;
+		for(int i=1;i<abilities.length;i++){
+			abilities[i]=false;
+		}
+		
 	}
 	
 	/**

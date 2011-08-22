@@ -19,6 +19,7 @@ public class Main {
 		width = Map.getMap().getWidthPx();
 		height = Map.getMap().getHeightPx();
 		new Building(3*Tile.getSize(),Tile.getSize(),1);
+		new Menu();
 		
 		Random r = new Random();
 		ArrayList<RockRaider> list = RockRaider.getRockRaiderList();

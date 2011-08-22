@@ -35,7 +35,6 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		else if (e.getButton() == 3) {
 			if (selection.size() == 1 && selection.get(0).isRockRaider()){
 				RockRaider r = (RockRaider)selection.get(0);
-				singleSelect(e.getX(), e.getY());
 				Tile t = Map.getMap().getTileAt(e.getX(), e.getY());
 				switch (t.getType()) {
 				case Tile.TYPE_STONE: r.goToAndDestroy(t); break;

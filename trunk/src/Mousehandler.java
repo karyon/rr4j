@@ -27,7 +27,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	
 	
 	
-	@Override
+	
 	public void mouseClicked(MouseEvent e) {
 		
 		if(e.getButton() == 1)
@@ -49,17 +49,14 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		}
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		
 	}
 
-	@Override
 	public void mouseExited(MouseEvent arg0) {
 		
 	}
 
-	@Override
 	public void mousePressed(MouseEvent arg0) {
 		if (arg0.getButton() == 1) {
 			selection = new ArrayList<GameObject>();
@@ -69,7 +66,6 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	}
 
 
-	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		int x = arg0.getX();
 		int y = arg0.getY();
@@ -118,6 +114,9 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 				selection.add(r);
 			}
 		}
+		if(selection.size()==1){ 
+			Menu.getButtons(selection.get(0));
+		}
 	}
 	
 	/**
@@ -132,14 +131,14 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		}
 	}
 
-	@Override
+	
 	public void mouseDragged(MouseEvent e) {
 		drawSelectionRect = true;
 		mouseCurrX = e.getX();
 		mouseCurrY = e.getY();
 	}
 
-	@Override
+	
 	public void mouseMoved(MouseEvent e) {
 		
 	}

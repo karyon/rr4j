@@ -7,11 +7,14 @@ public abstract class GameObject {
 	private final int width;
 	private final int height;
 	
+	protected boolean[] abilities;
+	
 	public GameObject(double x, double y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
 	}
 	
 	public double getX() {
@@ -33,6 +36,10 @@ public abstract class GameObject {
 	
 	public boolean isTile() {
 		return this instanceof Tile;
+	}
+	
+	public boolean isBuilding() {
+		return this instanceof Building;
 	}
 	
 	/**
@@ -63,6 +70,10 @@ public abstract class GameObject {
 	 */
 	public boolean intersects(double x, double y, double width, double height) {
 		return (x > this.x - width && y > this.y - height && x < this.x + this.width && y < this.y + this.height);
+	}
+
+	public boolean[] getAbilities() {
+		return abilities;
 	}
 	
 }

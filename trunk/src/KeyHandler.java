@@ -9,7 +9,7 @@ public class KeyHandler implements KeyListener {
 		return ctrl;
 	}
 
-	@Override
+
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()){
 		case KeyEvent.VK_CONTROL:
@@ -19,7 +19,7 @@ public class KeyHandler implements KeyListener {
 		
 	}
 
-	@Override
+	
 	public void keyReleased(KeyEvent e) {
 
 		switch (e.getKeyCode()){
@@ -30,7 +30,7 @@ public class KeyHandler implements KeyListener {
 		
 	}
 
-	@Override
+	
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		

@@ -3,7 +3,6 @@ import javax.swing.JPanel;
 
 
 public class Painter extends JPanel {
-	@Override
 	public void paintComponent(Graphics g) {
 		Map.getMap().paintAll(g);
 		Building.paintAll(g);
@@ -11,5 +10,8 @@ public class Painter extends JPanel {
 		Ore.paintAll(g);
 		Crystal.paintAll(g);
 		Mousehandler.paintDragRect(g);
+		Menu.paint(g);
+		//Menu.paintButtons(g);
+		Button.paint(g);
 	}
 }

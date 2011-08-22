@@ -22,9 +22,12 @@ public class Mousehandler implements MouseListener{
 				((RockRaider)selection.get(0)).destroy(t);
 			else if (t.getType() == Tile.TYPE_RUBBLE)
 				((RockRaider)selection.get(0)).destroy(t);
-			else
+			else {
 				moveSelected(arg0.getX(),arg0.getY());
+			}
 		}
+		else
+			moveSelected(arg0.getX(),arg0.getY());
 	}
 
 	@Override
@@ -87,6 +90,7 @@ public class Mousehandler implements MouseListener{
 		
 		for(RockRaider r: RockRaider.getRockRaiderList()) {
 			if (r.intersects(xPos, yPos, x - xPos, y - yPos)) {
+				
 				selection.add(r);
 			}
 		}
@@ -98,6 +102,7 @@ public class Mousehandler implements MouseListener{
 		{
 			if(r.isTile()==false){
 				((RockRaider) r).goTo(x - 10, y - 10);
+				System.out.println(((RockRaider)r).getID());
 			}
 			
 		}

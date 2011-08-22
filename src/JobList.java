@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 
 public class JobList {
-	ArrayList<Job> list = new ArrayList<Job>();
 	
+	private ArrayList<Job> list = new ArrayList<Job>();	
 	
 	public void addJob(Job job) {
 		list.add(job);
@@ -22,6 +22,8 @@ public class JobList {
 	}
 	
 	public void cancelAll() {
+		if (list.size() > 0)
+			list.get(0).cancel();
 		list.clear();
 	}
 }

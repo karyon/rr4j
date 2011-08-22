@@ -157,6 +157,11 @@ public class RockRaider extends GameObject
 			public void execute() {
 				setTimer(ms);
 			}
+			
+			@Override
+			public void cancel() {
+				timer = 0;
+			}
 		});
 	}
 

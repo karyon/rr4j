@@ -57,8 +57,10 @@ public class Main {
 	
 	public static void createWindowAndPainter() {
 		Painter p = new Painter();
-	
-		p.addMouseListener(new Mousehandler());
+		
+		Mousehandler m = new Mousehandler();
+		p.addMouseListener(m);
+		p.addMouseMotionListener(m);
 		p.setPreferredSize(new Dimension(width, height));
 		
 		frame = new JFrame("Testfenster");

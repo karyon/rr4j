@@ -10,5 +10,6 @@ public class Painter extends JPanel {
 		RockRaider.paintAll(g);
 		Ore.paintAll(g);
 		Crystal.paintAll(g);
+		Mousehandler.paintDragRect(g);
 	}
 }

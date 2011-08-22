@@ -24,7 +24,7 @@ public class RockRaider extends GameObject
 	/** List of all jobs this RockRaider has to execute. jobList.get(0) (if it exists) is the currently active one. */
 	private JobList jobList= new JobList();
 	
-	/** unused. */
+	/** The time in ms this RockRaider still should do nothing. */
 	private int timer = 0;
 	
 	

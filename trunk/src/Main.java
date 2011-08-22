@@ -10,9 +10,14 @@ public class Main {
 	private static long timeOfLastUpdate;
 	private static boolean isRunning = true;
 	
+	private static int width;
+	private static int height;
+	
 	public static void main(String args[]) {
 		Tools.createTileset();
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
+		width = Map.getMap().getWidthPx();
+		height = Map.getMap().getHeightPx();
 		new Building(3*Tile.getSize(),Tile.getSize());
 		
 		Random r = new Random();
@@ -53,14 +58,20 @@ public class Main {
 	public static void createWindowAndPainter() {
 		Painter p = new Painter();
 		p.addMouseListener(new Mousehandler());
+		p.setPreferredSize(new Dimension(width, height));
 		
 		frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(660, 560);
 		frame.setLocationRelativeTo(null);
 		frame.add(p);
+		frame.pack();
 		frame.setVisible(true);
 		frame.repaint();
+	}
+	
+	
+	public static int getPanelWidth() {
+		return width;
 	}
 }

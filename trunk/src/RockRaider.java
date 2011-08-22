@@ -146,7 +146,9 @@ public class RockRaider extends GameObject
 	 * @param y
 	 */
 	public void goToJob(final double x, final double y) {
-		jobList.addJob(new Job() {
+		
+		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
+			jobList.addJob(new Job() {
 			@Override
 			public void execute() {
 				RockRaider.this.setTarget(x, y);

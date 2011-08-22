@@ -12,10 +12,15 @@ public class Building extends GameObject{
 	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 	private final int ID;
 	private static int nextID=0;
+
+	final int toolstore = 0;
+	final int powerstation = 1;
+	private static int type;
 	
-	public Building(double x, double y) {
+	public Building(double x, double y,int type) {
 		super(x, y, size, size);
 		ID = nextID;
+		this.type=type;
 		Graphics g = img.getGraphics();
 		g.setColor(new Color(240,170,170));
 		g.fillRect(0, 0, size-1, size-1);

@@ -1,7 +1,3 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -11,9 +7,6 @@ public class RockRaider extends GameObject
 	/** The target coordinates this RockRaider is moving to. 
 	 * Equal to x and y if this RockRaider is not moving. */
 	private double tarX,tarY;
-	
-	/** The image of this RockRaider. */
-	private Image img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 	
 	/** ID of this RockRaider. Each RockRaider has a unique ID. */
 	private final int ID;
@@ -46,10 +39,6 @@ public class RockRaider extends GameObject
 		tarX = x;
 		tarY = y;
 		ID = nextID;
-		Graphics g = img.getGraphics();
-		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, size-1, size-1);
-		g.drawString(Integer.toString(ID),5, 15);
 		nextID++;
 		allRockRaiders.add(this);
 		
@@ -184,17 +173,8 @@ public class RockRaider extends GameObject
 		return ID;
 	}
 	
-	public void paint(Graphics g) {
-		g.drawImage(img, (int) x, (int) y, null);
-	}
-	
 	public static ArrayList<RockRaider> getRockRaiderList() {
 		return allRockRaiders;
-	}
-
-	public static void paintAll(Graphics g) {
-		for (RockRaider f : allRockRaiders)
-			f.paint(g);
 	}
 
 	public static void updateAll(int ms) {
@@ -260,5 +240,10 @@ public class RockRaider extends GameObject
 		//}
 		
 	} 
+	
+	
+	public static int getSize() {
+		return size;
+	}
 	
 }

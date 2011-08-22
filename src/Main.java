@@ -15,6 +15,7 @@ public class Main {
 	
 	public static void main(String args[]) {
 		Tools.createTileset();
+		Tools.createImages();
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
 		width = Map.getMap().getWidthPx();
 		height = Map.getMap().getHeightPx();

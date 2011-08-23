@@ -92,13 +92,22 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 * @param y
 	 */
 	private void singleSelect(int x, int y) {
-		for (RockRaider r: RockRaider.getRockRaiderList()) {
-			if (r.intersects(x, y)) {
-				selection.add(r);
-				return;
-			}
+		
+		if(Menu.buttonHit(x,y)){
+			return;
 		}
-		selection.add(Map.getMap().getTileAt(x, y));
+		
+		else{
+			for (RockRaider r: RockRaider.getRockRaiderList()) {
+				if (r.intersects(x, y)) {
+					selection.add(r);
+					Menu.getButtons(selection.get(0));
+					return;
+				}
+			}
+		
+			selection.add(Map.getMap().getTileAt(x, y));
+		}
 	}	
 	
 	/**

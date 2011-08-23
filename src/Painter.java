@@ -35,7 +35,6 @@ public class Painter extends JPanel {
 		}
 		
 		Menu.paint(g);
-		//Menu.paintButtons(g);
-		Button.paint(g);
+		Menu.paintButtons(g);
 	}
 }

@@ -10,27 +10,33 @@ public class Button {
 	private int type; //button for (RockRaider, Building, etc.)
 	private int button; //buttonnumber
 	private boolean active; //true, if available for this object
-	private static int x;
-	private static int y;
-	private static Image img;
+	private int x;
+	private int y;
+	private Image img;
+	boolean visible;
 
 	
-	public Button(int type, int button, int pos, boolean active){
+	public Button(int type, int button, int pos, boolean active, boolean visible){
 		
+		this.visible = visible;
 		img = Toolkit.getDefaultToolkit().createImage("res/t"+type+"Button"+(button-1)+active+".png");
 		this.type = type;
 		this.button = button;
 		this.setActive(active);
 		
 		setX(pos);
-		setY(15*this.button);
+		setY(40*this.button);
+		//System.out.println("y: "+y);
 		
 		}
 	
-	public static void paint(Graphics g){
-		if(img != null){
+	public void paint(Graphics g){
+		if(img != null && visible){
 			g.drawImage(img,x,y,null);
 		}
+	}
+	public void setVisibility(boolean visible){
+		this.visible = visible;
 	}
 
 	public void setActive(boolean active) {
@@ -55,6 +61,25 @@ public class Button {
 
 	public int getY() {
 		return y;
+	}
+
+	public void callFunction() {
+		if(visible){	
+			if(type==1){
+				if(button==1)
+					System.out.println("dig");
+				else if(button==2)
+					System.out.println("reinforce");
+				else if(button==3)
+					System.out.println("dynamite");
+			
+			}
+			else if(type==2){
+			}
+			else if(type==3){
+			
+			}
+		}
 	}
 	
 }

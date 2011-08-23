@@ -57,7 +57,7 @@ public class RockRaider extends GameObject
 	public void update(int ms) {
 		if (timer > 0) {
 			timer -= ms;
-			if (timer < 0) {
+			if (timer <= 0) {
 				timer = 0;
 				jobList.jobDoneExecuteNext();
 			}
@@ -246,10 +246,10 @@ public class RockRaider extends GameObject
 		switch (t.getType()) {
 		case Tile.TYPE_DIRT: waitJob(300); break;
 		case Tile.TYPE_LOOSE_ROCK: waitJob(800); break;
-		case Tile.TYPE_RUBBLE: waitJob(400); break;
+		case Tile.TYPE_RUBBLE: waitJob(500); break;
 		default: return;
 		}
-		waitJob(600);
+		waitJob(500);
 		//new Job: destroy t
 		destroy(t);
 	}

@@ -41,7 +41,6 @@ public class Tile extends GameObject{
 	}
 
 	public void destroy() {
-		System.out.println("machts");
 		switch (type) {
 		case TYPE_DIRT:
 		case TYPE_LOOSE_ROCK:

@@ -11,102 +11,106 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 */
 	private static ArrayList<GameObject> selection = new ArrayList<GameObject>();
 	/**
-	 * Coordinates of the last press of a mouse button. May be changed to
-	 * the coordinates of the upper left corner of the selection-rectangle.
+	 * Coordinates of the last press of a mouse button.
 	 */
 	private static int mousePressedX, mousePressedY;
 	/**
-	 * Current coordinates of the mouse. Only updated when a mouse button is pressed.
-	 * the coordinates of the upper left corner of the selection-rectangle.
+	 * Current coordinates of the mouse. Only updated when a mouse button is pressed and dragged.
 	 */
 	private static int mouseCurrX, mouseCurrY;
+	
+	private static int buttonPressed = MouseEvent.NOBUTTON;
 	
 	private static boolean drawSelectionRect = false;
 	
 	
 	
-	
+	@Override
 	public void mouseClicked(MouseEvent e) {
-		boolean objectCollision=false;
-		
-		if(e.getButton() == 1)
-			singleSelect(mousePressedX, mousePressedY);
-		else if (e.getButton() == 3) {
-			if (selection.size() == 1 && selection.get(0).isRockRaider()){
-				RockRaider r = (RockRaider)selection.get(0);
-				Tile t = Map.getMap().getTileAt(e.getX(), e.getY());
-				for (int i =0;i < Ore.getOreList().size();i++){
-					if(Ore.getOreList().get(i).intersects(e.getX(),e.getY())){
-						objectCollision = true;
-						r.takeRes(1, Ore.getOreList().get(i));
-						
-					}
-					}
-				for (int i = 0; i < Crystal.getCrystalList().size(); i++){
-					if(Crystal.getCrystalList().get(i).intersects(e.getX(),e.getY())){
-						objectCollision = true;
-						r.takeRes(0, Crystal.getCrystalList().get(i));
-						
-					}
-				}	
-				
-				if(objectCollision) {
-					System.out.println("TEST");
-					
-				}
-				if (objectCollision == false){
-				switch (t.getType()) {
-				case Tile.TYPE_DIRT: r.goToAndDestroy(t); break;
-				case Tile.TYPE_LOOSE_ROCK: r.goToAndDestroy(t); break;
-				case Tile.TYPE_RUBBLE: r.goToAndDestroy(t); break;
-				case Tile.TYPE_GROUND: r.goToJob(e.getX(), e.getY()); break;
-				default: //do nothing
-				}}
-				else {}
-			}
-			//assuming the selection consists solely of RockRaiders
-			else if (selection.size() > 1 && selection.get(0).isRockRaider())
-				moveSelected(e.getX(),e.getY()); 
-		}
 	}
-
+	
+	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		
 	}
-
+	
+	@Override
 	public void mouseExited(MouseEvent arg0) {
 		
 	}
-
+	
+	@Override
 	public void mousePressed(MouseEvent arg0) {
-		if (arg0.getButton() == 1) {
+		//if some button is already pressed, ignore this additional press.
+		if (buttonPressed != MouseEvent.NOBUTTON)
+			return;
+		buttonPressed = arg0.getButton();
+		
+		if (arg0.getButton() == MouseEvent.BUTTON1) {
 			selection = new ArrayList<GameObject>();
 		}
 		mousePressedX = arg0.getX();
 		mousePressedY = arg0.getY();
 	}
-
-
+	
+	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		int x = arg0.getX();
-		int y = arg0.getY();
+		//if a button is released which is not in buttonPressed, ignore this release.
+		if (arg0.getButton() != buttonPressed)
+			return;
+		buttonPressed = MouseEvent.NOBUTTON;
 		
-		if (x != mousePressedX && y != mousePressedY) {
-			// multiSelect needs the lower left corner of the selection
-			//rectangle, so swap the variables if necessary.
-			if (mousePressedX > x) {
-				int d = x;
-				x = mousePressedX;
-				mousePressedX = d;
-			}
-			if (mousePressedY > y) {
-				int d = y;
-				y = mousePressedY;
-				mousePressedY = d;
-			}
-			multiSelect(x, y);
-		}
+		
+		int[] selectionRect = getSelectionRect();
 		drawSelectionRect = false;
+		
+		//handle a small drag like a click.
+		if (selectionRect == null || selectionRect[2] + selectionRect[3] < 4) {
+			mouseClick(arg0.getX(), arg0.getY(), arg0.getButton());
+			return;
+		}
+		
+		if (arg0.getButton() == MouseEvent.BUTTON1) {
+			multiSelect(selectionRect[0], selectionRect[1], selectionRect[2], selectionRect[3]);
+		}
+	}
+	
+	
+	private void mouseClick(int x, int y, int button) {
+		
+		if(button == MouseEvent.BUTTON1)
+			singleSelect(x, y);
+		else if (button == MouseEvent.BUTTON3) {
+			if (selection.size() == 1 && selection.get(0).isRockRaider()){
+				boolean objectCollision = false;
+				RockRaider r = (RockRaider)selection.get(0);
+				for (Ore o: Ore.getOreList()) {
+					if(o.intersects(x, y)){
+						objectCollision = true;
+						r.takeRes(1, o);
+					}
+				}
+				for (Crystal c: Crystal.getCrystalList()) {
+					if(c.intersects(x, y)) {
+						objectCollision = true;
+						r.takeRes(0, c);
+					}
+				}
+				if (objectCollision == false){
+					Tile t = Map.getMap().getTileAt(x, y);
+					switch (t.getType()) {
+					case Tile.TYPE_DIRT: r.goToAndDestroy(t); break;
+					case Tile.TYPE_LOOSE_ROCK: r.goToAndDestroy(t); break;
+					case Tile.TYPE_RUBBLE: r.goToAndDestroy(t); break;
+					case Tile.TYPE_GROUND: moveSelected(x, y); break;
+					default: //do nothing
+					}
+				}
+			}
+			//assuming the selection consists solely of RockRaiders
+			else if (selection.size() > 1 && selection.get(0).isRockRaider())
+				moveSelected(x, y); 
+		}
 	}
 
 	/**
@@ -120,34 +124,31 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			return;
 		}
 		
-		else{
-			for (RockRaider r: RockRaider.getRockRaiderList()) {
-				if (r.intersects(x, y)) {
-					selection.add(r);
-					Menu.createButtons(selection.get(0));
-					return;
-				}
+		for (RockRaider r: RockRaider.getRockRaiderList()) {
+			if (r.intersects(x, y)) {
+				selection.add(r);
+				Menu.createButtons(r);
+				return;
 			}
-			for(Building b: Building.getBuildingList())
-				if(b.intersects(x,y)){
-					selection.add(b);
-					Menu.createButtons(selection.get(0));
-					return;
-				}
-			
-			selection.add(Map.getMap().getTileAt(x, y));
-			
 		}
+		for(Building b: Building.getBuildingList()) {
+			if(b.intersects(x,y)){
+				selection.add(b);
+				Menu.createButtons(b);
+				return;
+			}
+		}
+		selection.add(Map.getMap().getTileAt(x, y));
 	}	
 	
 	/**
-	 * Selects all RockRaiders in the rectangle from x/y to xPos/yPos
+	 * Selects all RockRaiders in the specified rectangle
 	 * @param x
 	 * @param y
 	 */
-	private void multiSelect(double x, double y) {
+	private void multiSelect(int x, int y, int width, int height) {
 		for(RockRaider r: RockRaider.getRockRaiderList()) {
-			if (r.intersects(mousePressedX, mousePressedY, x - mousePressedX, y - mousePressedY)) {
+			if (r.intersects(x, y, width, height)) {
 				selection.add(r);
 			}
 		}
@@ -162,23 +163,26 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 * @param x
 	 * @param y
 	 */
-	public void moveSelected(double x, double y) { 		
+	public void moveSelected(int x, int y) { 		
 		for(GameObject r: selection) {
 			((RockRaider) r).goToJob(x - 10, y - 10);
 		}
 	}
-
 	
+	@Override
 	public void mouseDragged(MouseEvent e) {
+		if (buttonPressed != MouseEvent.BUTTON1)
+			return;
 		drawSelectionRect = true;
 		mouseCurrX = e.getX();
 		mouseCurrY = e.getY();
 	}
-
 	
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		
 	}
+	
 	
 	public static int[] getSelectionRect() {
 		if (!drawSelectionRect)

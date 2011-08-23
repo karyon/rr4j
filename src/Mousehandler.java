@@ -27,6 +27,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	
 	
 	public void mouseClicked(MouseEvent e) {
+		boolean objectCollision=false;
 		
 		if(e.getButton() == 1)
 			singleSelect(mousePressedX, mousePressedY);
@@ -34,13 +35,34 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			if (selection.size() == 1 && selection.get(0).isRockRaider()){
 				RockRaider r = (RockRaider)selection.get(0);
 				Tile t = Map.getMap().getTileAt(e.getX(), e.getY());
+				for (int i =0;i < Ore.getOreList().size();i++){
+					if(Ore.getOreList().get(i).intersects(e.getX(),e.getY())){
+						objectCollision = true;
+						r.takeRes(1, Ore.getOreList().get(i));
+						
+					}
+					}
+				for (int i = 0; i < Crystal.getCrystalList().size(); i++){
+					if(Crystal.getCrystalList().get(i).intersects(e.getX(),e.getY())){
+						objectCollision = true;
+						r.takeRes(0, Crystal.getCrystalList().get(i));
+						
+					}
+				}	
+				
+				if(objectCollision) {
+					System.out.println("TEST");
+					
+				}
+				if (objectCollision == false){
 				switch (t.getType()) {
 				case Tile.TYPE_DIRT: r.goToAndDestroy(t); break;
 				case Tile.TYPE_LOOSE_ROCK: r.goToAndDestroy(t); break;
 				case Tile.TYPE_RUBBLE: r.goToAndDestroy(t); break;
 				case Tile.TYPE_GROUND: r.goToJob(e.getX(), e.getY()); break;
 				default: //do nothing
-				}
+				}}
+				else {}
 			}
 			//assuming the selection consists solely of RockRaiders
 			else if (selection.size() > 1 && selection.get(0).isRockRaider())

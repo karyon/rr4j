@@ -152,6 +152,37 @@ public class RockRaider extends GameObject
 		});
 	}
 	
+	public void takeRes (final int kind, final GameObject object) {
+		goToJob(object.x, object.y );
+		switch (kind){
+		case 1:
+			jobList.addJob(new Job(){
+				@Override
+				public void execute() {
+					Player.setOre(Player.getOre()+1);
+					System.out.println(Player.getOre());
+					Ore.getOreList().remove(object);
+					jobList.jobDoneExecuteNext();
+				}
+			});
+			break;
+		case 0:jobList.addJob(new Job(){
+			@Override
+			public void execute() {
+				Player.setCrystal(Player.getCrystal()+1);
+				Crystal.getCrystalList().remove(object);
+				System.out.println("bis hierhin?");
+				jobList.jobDoneExecuteNext();
+				}
+			});
+			break;
+			
+		}
+		
+	}
+		
+	
+	
 	public void waitJob(final int ms) {
 		jobList.addJob(new Job() {
 			@Override

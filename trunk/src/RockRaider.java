@@ -197,7 +197,8 @@ public class RockRaider extends GameObject
 		jobList.cancelAll();
 		//goTo the Tile t
 		switch (t.getType()) {
-		case Tile.TYPE_STONE:
+		case Tile.TYPE_DIRT:
+		case Tile.TYPE_LOOSE_ROCK:
 			if (x < t.x - size)
 				goToJob(t.x - size-2, t.y + 21);
 			else if (x > t.x + Tile.getSize())
@@ -208,6 +209,12 @@ public class RockRaider extends GameObject
 		case Tile.TYPE_RUBBLE:
 			goToJob(t.x + 10, t.y + 10);
 			break;
+		default: return;
+		}
+		switch (t.getType()) {
+		case Tile.TYPE_DIRT: waitJob(300); break;
+		case Tile.TYPE_LOOSE_ROCK: waitJob(800); break;
+		case Tile.TYPE_RUBBLE: waitJob(500); break;
 		default: return;
 		}
 		waitJob(500);

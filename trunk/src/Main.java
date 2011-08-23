@@ -19,7 +19,7 @@ public class Main {
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
 		width = Map.getMap().getWidthPx();
 		height = Map.getMap().getHeightPx();
-		new Building(3*Tile.getSize(),Tile.getSize(),1);
+		new Building(4*Tile.getSize(),3*Tile.getSize(),1);
 		new Menu();
 		
 		Random r = new Random();

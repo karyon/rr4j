@@ -5,19 +5,21 @@ public class Tile extends GameObject{
 
 	private int type;  //Tile Typ
 	private boolean walkable;
-	private int imageID;
 	private static final int size = 64;
 	
 	final static int TYPE_GROUND = 0;
 	final static int TYPE_WATER = 1;
-	final static int TYPE_STONE = 2;
 	final static int TYPE_RUBBLE = 3;
+	final static int TYPE_SOLID_ROCK = 4;
+	final static int TYPE_HARD_ROCK = 5;
+	final static int TYPE_LOOSE_ROCK = 6;
+	final static int TYPE_DIRT = 7;
 	
 	
-	public Tile (int x, int y, int type, int imgageID){
+	
+	public Tile (int x, int y, int type){
 		super(x, y, size, size);
 		this.type = type;
-		this.imageID = imgageID;
 		
 		walkable = type == TYPE_GROUND || type == TYPE_RUBBLE;
 	}
@@ -38,18 +40,10 @@ public class Tile extends GameObject{
 		return walkable;
 	}
 
-	public int getImageID() {
-		return imageID;
-	}
-
-	public void setImageID(int imageID) {
-		this.imageID = imageID;
-	}
-
-
 	public void destroy() {
 		switch (type) {
-		case TYPE_STONE:
+		case TYPE_DIRT:
+		case TYPE_LOOSE_ROCK:
 			type = TYPE_RUBBLE;
 			walkable = true;
 			break;

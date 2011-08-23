@@ -35,10 +35,11 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 				RockRaider r = (RockRaider)selection.get(0);
 				Tile t = Map.getMap().getTileAt(e.getX(), e.getY());
 				switch (t.getType()) {
-				case Tile.TYPE_STONE: r.goToAndDestroy(t); break;
+				case Tile.TYPE_DIRT: r.goToAndDestroy(t); break;
+				case Tile.TYPE_LOOSE_ROCK: r.goToAndDestroy(t); break;
 				case Tile.TYPE_RUBBLE: r.goToAndDestroy(t); break;
-				case Tile.TYPE_WATER: break;
-				case Tile.TYPE_GROUND: r.goToJob(e.getX(), e.getY());
+				case Tile.TYPE_GROUND: r.goToJob(e.getX(), e.getY()); break;
+				default: //do nothing
 				}
 			}
 			//assuming the selection consists solely of RockRaiders

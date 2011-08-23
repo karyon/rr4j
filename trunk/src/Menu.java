@@ -56,7 +56,13 @@ public class Menu {
 					buttons[i] = new Button(c, i+1, menuPos, abilities[i],visible);
 				}
 				break;
-			case 2:  break;
+				
+			case 2:  
+				for(int i=0; i< abilities.length; i++){
+					buttons[i] = new Button(c, i+1, menuPos, abilities[i], visible);
+				}
+				break;
+				
 			case 3:  break;
 			default:
 		}
@@ -98,7 +104,7 @@ public class Menu {
 				for(int i=0;i<buttons.length;i++){
 					if(y>=buttons[i].getY() && y<buttons[i].getY()+40){
 						buttonHitted=i;
-						buttons[i].callFunction();
+						buttons[i].callFunction(buttons[i].getX(),buttons[i].getY());
 						return true;					
 					}
 				}

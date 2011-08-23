@@ -12,6 +12,7 @@ public class Menu {
 	private static Button[] buttons;
 	private static boolean visible = true;
 	private static int buttonHitted;
+	private static GameObject o;
 
 	
 	public Menu(){
@@ -33,8 +34,9 @@ public class Menu {
 		}
 	}	
 	
-	public static void getButtons(GameObject bm){
+	public static void createButtons(GameObject bm){
 		int c=0;
+		o=bm;
 		boolean[] abilities = bm.getAbilities();
 		
 		
@@ -50,22 +52,23 @@ public class Menu {
 		buttons = new Button[abilities.length];
 		
 		
-		switch (c){
-			case 1:
-				for(int i=0; i < abilities.length; i++){
-					buttons[i] = new Button(c, i+1, menuPos, abilities[i],visible);
-				}
-				break;
+		if(bm.isRockRaider()){
+			for(int i=0; i < abilities.length; i++){
+				buttons[i] = new Button(1, i+1, menuPos, abilities[i],visible);
+			}
 				
-			case 2:  
-				for(int i=0; i< abilities.length; i++){
-					buttons[i] = new Button(c, i+1, menuPos, abilities[i], visible);
-				}
-				break;
-				
-			case 3:  break;
-			default:
 		}
+				
+		if(bm.isBuilding()) {
+			for(int i=0; i< abilities.length; i++){
+				buttons[i] = new Button(2, i+1, menuPos, abilities[i], visible);
+			}
+		}
+				
+		if(bm.isTile()){
+			
+		}
+		
 	}
 	
 	public static void menuButtonClicked(){
@@ -104,7 +107,7 @@ public class Menu {
 				for(int i=0;i<buttons.length;i++){
 					if(y>=buttons[i].getY() && y<buttons[i].getY()+40){
 						buttonHitted=i;
-						buttons[i].callFunction(buttons[i].getX(),buttons[i].getY());
+						buttons[i].callFunction(o.getX(),o.getY());
 						return true;					
 					}
 				}

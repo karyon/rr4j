@@ -63,7 +63,8 @@ public class Button {
 		return y;
 	}
 
-	public void callFunction(int x, int y) {
+	public void callFunction(double x, double y) {
+		
 		if(visible){	
 			if(type==1){
 				if(button==1)
@@ -77,8 +78,9 @@ public class Button {
 			
 			}
 			else if(type==2){
-				if(button==0)
-					new RockRaider(x,y-RockRaider.getSize());//doesn't work
+				if(button==1)
+					new RockRaider(x,y-RockRaider.getSize());
+					
 			}
 			else if(type==3){
 			

@@ -102,17 +102,19 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			for (RockRaider r: RockRaider.getRockRaiderList()) {
 				if (r.intersects(x, y)) {
 					selection.add(r);
-					Menu.getButtons(selection.get(0));
+					Menu.createButtons(selection.get(0));
 					return;
 				}
 			}
 			for(Building b: Building.getBuildingList())
-				if(b.intersects(b)){
+				if(b.intersects(x,y)){
 					selection.add(b);
-					Menu.getButtons(selection.get(0));
+					Menu.createButtons(selection.get(0));
 					return;
 				}
+			
 			selection.add(Map.getMap().getTileAt(x, y));
+			
 		}
 	}	
 	
@@ -128,7 +130,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			}
 		}
 		if(selection.size()==1){ 
-			Menu.getButtons(selection.get(0));
+			Menu.createButtons(selection.get(0));
 		}
 	}
 	

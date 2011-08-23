@@ -105,7 +105,12 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 					return;
 				}
 			}
-		
+			for(Building b: Building.getBuildingList())
+				if(b.intersects(b)){
+					selection.add(b);
+					Menu.getButtons(selection.get(0));
+					return;
+				}
 			selection.add(Map.getMap().getTileAt(x, y));
 		}
 	}	

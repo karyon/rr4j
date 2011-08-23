@@ -19,6 +19,8 @@ public class Building extends GameObject{
 		buildingList.add(this);
 		nextID++;
 		
+		abilities = new boolean[5];
+		
 		
 		
 		

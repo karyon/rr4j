@@ -246,10 +246,10 @@ public class RockRaider extends GameObject
 		switch (t.getType()) {
 		case Tile.TYPE_DIRT: waitJob(300); break;
 		case Tile.TYPE_LOOSE_ROCK: waitJob(800); break;
-		case Tile.TYPE_RUBBLE: waitJob(500); break;
+		case Tile.TYPE_RUBBLE: waitJob(400); break;
 		default: return;
 		}
-		waitJob(500);
+		waitJob(600);
 		//new Job: destroy t
 		destroy(t);
 	}

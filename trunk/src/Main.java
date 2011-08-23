@@ -68,7 +68,8 @@ public class Main {
 		frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
+		//frame.setLocationRelativeTo(null); //topleft corner of the window, -> at center of screen
+		frame.setResizable(false);
 		frame.add(p);
 		frame.pack();
 		frame.setVisible(true);

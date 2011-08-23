@@ -10,7 +10,18 @@ public class Painter extends JPanel {
 		for (int x = 0; x < mapFields.length; x++) {
 			for (int y = 0; y < mapFields[0].length; y++) {
 				Tile currTile = mapFields[x][y];
-				g.drawImage(Tools.getTileImages()[currTile.getType()], x * tileSize, y * tileSize, null);
+				int tileImageID;
+				switch (currTile.getType()) {
+				case Tile.TYPE_GROUND:       tileImageID = 0; break;
+				case Tile.TYPE_RUBBLE:       tileImageID = 3; break;
+				case Tile.TYPE_SOLID_ROCK:   tileImageID = 4; break;
+				case Tile.TYPE_HARD_ROCK:    tileImageID = 5; break;
+				case Tile.TYPE_LOOSE_ROCK:   tileImageID = 6; break;
+				case Tile.TYPE_DIRT:         tileImageID = 7; break;
+				case Tile.TYPE_WATER:        tileImageID = 1; break;
+				default:                     tileImageID = -1;
+				}
+				g.drawImage(Tools.getTileImages()[tileImageID], x * tileSize, y * tileSize, null);
 			}
 		}
 

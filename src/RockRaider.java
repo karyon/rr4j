@@ -115,12 +115,13 @@ public class RockRaider extends GameObject
 					return tiles[x][y];
 			}
 		}
+		/*
 		for (RockRaider r : allRockRaiders) {
 			if (r == this)
 				continue;
 			if (this.intersects(r))
 				return r;
-		}
+		}*/
 		
 		ArrayList<Building> building = Building.getBuildingList();
 		for (Building b: building){

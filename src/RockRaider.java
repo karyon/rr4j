@@ -143,7 +143,7 @@ public class RockRaider extends GameObject
 	 */
 	public void goToJob(final double x, final double y) {
 		
-		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
+		
 			jobList.addJob(new Job() {
 			@Override
 			public void execute() {
@@ -152,8 +152,30 @@ public class RockRaider extends GameObject
 		});
 	}
 	
+	public void goToObjectJob(GameObject object){
+		int height = object.getHeight();
+		int width = object.getWidth();
+		if (x < object.x -size)
+			goToJob(object.x - size-2, object.y + 21);
+		else if (x > object.x + width)
+			goToJob(object.x + width+2, object.y + 21);
+		else 
+			goToJob(object.x + 20, (y < object.y) ?  object.y - size - 2 : object.y + height + 2);
+		
+		
+	}
+	
+	/**
+	 * Method allows RockRaiders to take rescources based on the given kind of rescource while creating 2 goToJobs (one to the res one back to the ToolStore)
+	 * @param kind 1 = Ore, 0 = Meth
+	 * @param object
+	 */
 	public void takeRes (final int kind, final GameObject object) {
+		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
 		goToJob(object.x, object.y );
+		
+		goToObjectJob(Building.getBuildingList().get(0));
+ System.out.println("da");
 		switch (kind){
 		case 1:
 			jobList.addJob(new Job(){
@@ -165,6 +187,7 @@ public class RockRaider extends GameObject
 					jobList.jobDoneExecuteNext();
 				}
 			});
+
 			break;
 		case 0:jobList.addJob(new Job(){
 			@Override

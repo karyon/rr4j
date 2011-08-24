@@ -8,6 +8,10 @@ public class KeyHandler implements KeyListener {
 	public static boolean isCtrl() {
 		return ctrl;
 	}
+	
+	public static void setCtrl(boolean ctrl){
+		KeyHandler.ctrl = ctrl;
+	}
 
 
 	public void keyPressed(KeyEvent e) {

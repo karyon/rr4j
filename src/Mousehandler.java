@@ -89,13 +89,14 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 				for (Ore o: Ore.getOreList()) {
 					if(o.intersects(x, y)){
 						objectCollision = true;
-						r.takeRes(1, o);
+						r.takeRes(1, o); 
 					}
 				}
 				for (Crystal c: Crystal.getCrystalList()) {
 					if(c.intersects(x, y)) {
 						objectCollision = true;
 						r.takeRes(0, c);
+						System.out.println("ololol");
 					}
 				}
 				if (objectCollision == false){

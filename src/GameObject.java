@@ -42,6 +42,14 @@ public abstract class GameObject {
 		return this instanceof Building;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	/**
 	 * @param another
 	 * @return true, if this GameObject intersects with the specified GameObject.

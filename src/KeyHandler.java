@@ -12,9 +12,11 @@ public class KeyHandler implements KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()){
-		case KeyEvent.VK_CONTROL:
-			ctrl = true;
-			break;
+		case KeyEvent.VK_CONTROL: ctrl = true; break;
+		case KeyEvent.VK_UP: Painter.setDirection(Painter.DIRECTION_UP); break;
+		case KeyEvent.VK_DOWN: Painter.setDirection(Painter.DIRECTION_DOWN); break;
+		case KeyEvent.VK_LEFT: Painter.setDirection(Painter.DIRECTION_LEFT); break;
+		case KeyEvent.VK_RIGHT: Painter.setDirection(Painter.DIRECTION_RIGHT); break;
 		}
 		
 	}
@@ -26,6 +28,11 @@ public class KeyHandler implements KeyListener {
 		case KeyEvent.VK_CONTROL:
 			ctrl = false;
 			break;
+
+		case KeyEvent.VK_UP:
+		case KeyEvent.VK_DOWN:
+		case KeyEvent.VK_LEFT:
+		case KeyEvent.VK_RIGHT: Painter.setDirection(Painter.DIRECTION_NONE); break;
 		}
 		
 	}

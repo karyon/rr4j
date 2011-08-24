@@ -56,5 +56,9 @@ public class Tile extends GameObject{
 			break;
 		}
 	}
+	
+	public String toString() {
+		return "(" + x/64 + ", " + y/64 + ")";
+	}
 
 }

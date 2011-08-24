@@ -104,7 +104,7 @@ public class Menu {
 				for(int i=0;i<buttons.length;i++){
 					if(y>=(i+1)*bgroesse && y<(i+1)*bgroesse+40){
 						buttonHitted=i;
-						if(visible)
+						if(visible && change)
 							buttons[i].callFunction(o.getX(),o.getY());
 						return true;					
 					}

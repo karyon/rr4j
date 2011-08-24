@@ -1,37 +1,42 @@
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.ImageObserver;
 
 
 public class Menu {
 	
 	private static Image img;
-	private static int width;
-	private static int height;
 	private static int menuPos;
 	private static Button[] buttons;
 	private static boolean visible = true;
 	private static int buttonHitted;
 	private static GameObject o;
+	private static int bgroesse;
 
+	
 	
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
 		menuPos=Main.getPanelWidth()-40;
 		buttons = new Button[0];
+		bgroesse=40;
 		
 	}
 	
 	public static void paint(Graphics g){
 		g.drawImage(img,menuPos,1,null);
-		
-		
-	}
-	
-	public static void paintButtons(Graphics g){
-		for(int i=0;i<buttons.length;i++){
-			buttons[i].paint(g);	
+		if(visible){
+			for(int i=0;i<buttons.length;i++){
+				Button b=buttons[i];
+				if(b.getImage() != null)
+					g.drawImage(b.getImage(),menuPos,(i+1)*bgroesse,null);	
+				
+				
+			}
 		}
+		
+		
 	}	
 	
 	public static void createButtons(GameObject bm){
@@ -54,47 +59,38 @@ public class Menu {
 		
 		if(bm.isRockRaider()){
 			for(int i=0; i < abilities.length; i++){
-				buttons[i] = new Button(1, i+1, menuPos, abilities[i],visible);
+				buttons[i] = new Button(1, i+1, abilities[i],visible);
 			}
+			return;
 				
 		}
 				
 		if(bm.isBuilding()) {
 			for(int i=0; i< abilities.length; i++){
-				buttons[i] = new Button(2, i+1, menuPos, abilities[i], visible);
+				buttons[i] = new Button(2, i+1,abilities[i], visible);
 			}
+			return;
 		}
 				
 		if(bm.isTile()){
 			
+			return;
 		}
 		
+	}
+	
+	public static void delSelected(){
+		buttons= new Button[0];
 	}
 	
 	public static void menuButtonClicked(){
 		if(visible)
-			hide();
+			visible=false;
 		else
-			show();
-	}
-		
-	public static void show(){
-		visible = true;
-		for(int i=0;i<buttons.length;i++){
-			buttons[i].setVisibility(visible);
-		}
-		
-	}
-	
-	public static void hide(){
-		visible = false;
-		for(int i=0;i<buttons.length;i++){
-			buttons[i].setVisibility(visible);
-		}
+			visible=true;
 	}
 
 	public static boolean buttonHit(int x, int y) {
-		
 		
 		
 		if(x>menuPos && x < Main.getPanelWidth()){
@@ -105,9 +101,10 @@ public class Menu {
 			}
 			else{	
 				for(int i=0;i<buttons.length;i++){
-					if(y>=buttons[i].getY() && y<buttons[i].getY()+40){
+					if(y>=(i+1)*bgroesse && y<(i+1)*bgroesse+40){
 						buttonHitted=i;
-						buttons[i].callFunction(o.getX(),o.getY());
+						if(visible)
+							buttons[i].callFunction(o.getX(),o.getY());
 						return true;					
 					}
 				}

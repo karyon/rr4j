@@ -1,9 +1,34 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
+
 import javax.swing.JPanel;
 
 
 public class Painter extends JPanel {
+	
+	public static final int DIRECTION_NONE = 0;
+	public static final int DIRECTION_UP = 1;
+	public static final int DIRECTION_DOWN = 2;
+	public static final int DIRECTION_LEFT = 3;
+	public static final int DIRECTION_RIGHT = 4;
+	
+	private static int direction = DIRECTION_NONE;
+	
+	private static double offsetX = 300;
+	private static double offsetY = 300;
+	
+	private static double speedX = 0;
+	private static double speedY = 0;
+	
+	private static final double maxSpeed = 100;
+	
+	private static final int width = 800;
+	private static final int height = 600;
+	
+	
+	
 	public void paintComponent(Graphics g) {
 		Tile[][] mapFields = Map.getMap().getMapFields();
 		int tileSize = Tile.getSize();
@@ -21,23 +46,23 @@ public class Painter extends JPanel {
 				case Tile.TYPE_WATER:        tileImageID = 1; break;
 				default:                     tileImageID = -1;
 				}
-				g.drawImage(Tools.getTileImages()[tileImageID], x * tileSize, y * tileSize, null);
+				drawImage(g, Tools.getTileImages()[tileImageID], x * tileSize, y * tileSize);
 			}
 		}
 
 		for (Building b : Building.getBuildingList())
-			g.drawImage(Tools.getBuildingImage(), (int) b.getX(), (int) b.getY(), null);
+			drawImage(g, Tools.getBuildingImage(), b.getX(), b.getY());
 		
 
 		for (RockRaider r : RockRaider.getRockRaiderList())
-			g.drawImage(Tools.getRockRaiderImage(), (int) r.getX(), (int) r.getY(), null);
+			drawImage(g, Tools.getRockRaiderImage(), r.getX(), r.getY());
 		
 		
 		for (Ore o: Ore.getOreList())
-			g.drawImage(Tools.getOreImage(), (int) o.getX(), (int) o.getY(), null);
+			drawImage(g, Tools.getOreImage(), o.getX(), o.getY());
 
 		for (Crystal c: Crystal.getCrystalList())
-			g.drawImage(Tools.getCrystalImage(), (int) c.getX(), (int) c.getY(), null);
+			drawImage(g, Tools.getCrystalImage(), c.getX(), c.getY());
 		
 		int[] selectionRect = Mousehandler.getSelectionRect();
 		if (selectionRect != null) {
@@ -46,5 +71,54 @@ public class Painter extends JPanel {
 		}
 		
 		Menu.paint(g);
+	}
+	
+	
+	public void drawImage(Graphics g, Image img, double x, double y) {
+		//zwei casts, da sonst bei negativen ergebnissen merkwuerdigkeiten auftreten
+		g.drawImage(img, (int)(x - (int) offsetX), (int)(y - (int) offsetY), null);
+	}
+	
+	public static void update(int ms) {
+		
+		switch (direction) {
+		case DIRECTION_UP: speedY = -maxSpeed; break;
+		case DIRECTION_DOWN: speedY = maxSpeed; break;
+		case DIRECTION_LEFT: speedX = -maxSpeed; break;
+		case DIRECTION_RIGHT: speedX = maxSpeed; break;
+		case DIRECTION_NONE: speedX = speedY = 0; break;
+		}
+		
+		offsetY += speedY / 1000.0 * ms;
+		offsetX += speedX / 1000.0 * ms;
+		if (offsetX < 0)
+			offsetX = 0;
+		else if (offsetX > Map.getMap().getWidthPx() - width)
+			offsetX = Map.getMap().getWidthPx() - width;
+		if (offsetY < 0)
+			offsetY = 0;
+		else if (offsetY > Map.getMap().getHeightPx() - width)
+			offsetY = Map.getMap().getHeightPx() - width;
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(width, height);
+	}
+	
+	public static int getOffsetX() {
+		return (int) offsetX;
+	}
+	
+	public static int getOffsetY() {
+		return (int) offsetY;
+	}
+	
+	public static void setDirection(int direction) {
+		Painter.direction = direction;
+	}
+	
+	public static int getPanelWidth() {
+		return width;
 	}
 }

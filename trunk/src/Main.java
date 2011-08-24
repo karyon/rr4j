@@ -10,15 +10,10 @@ public class Main {
 	private static long timeOfLastUpdate;
 	private static boolean isRunning = true;
 	
-	private static int width;
-	private static int height;
-	
 	public static void main(String args[]) {
 		Tools.createTileset();
 		Tools.createImages();
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
-		width = Map.getMap().getWidthPx();
-		height = Map.getMap().getHeightPx();
 		new Building(4*Tile.getSize(),3*Tile.getSize(),1);
 		new Menu();
 		
@@ -54,6 +49,7 @@ public class Main {
 		timeOfLastUpdate = System.currentTimeMillis();
 		//do all updates here
 		RockRaider.updateAll(ms);
+		Painter.update(ms);
 	}
 	
 	
@@ -63,7 +59,6 @@ public class Main {
 		Mousehandler m = new Mousehandler();
 		p.addMouseListener(m);
 		p.addMouseMotionListener(m);
-		p.setPreferredSize(new Dimension(width, height));
 		
 		frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
@@ -75,10 +70,5 @@ public class Main {
 		frame.setVisible(true);
 		frame.repaint();
 		frame.addKeyListener(new KeyHandler());
-	}
-	
-	
-	public static int getPanelWidth() {
-		return width;
 	}
 }

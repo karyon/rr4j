@@ -18,7 +18,7 @@ public class Menu {
 	
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
-		menuPos=Main.getPanelWidth()-40;
+		menuPos=Painter.getPanelWidth()-40;
 		buttons = new Button[0];
 		bgroesse=40;
 		
@@ -90,21 +90,20 @@ public class Menu {
 			visible=true;
 	}
 
-	public static boolean buttonHit(int x, int y,boolean change) {
+	public static boolean buttonHit(int x, int y) {
 		
 		
-		if(x>menuPos && x < Main.getPanelWidth()){
+		if(x>menuPos && x < Painter.getPanelWidth()){
 		
 			if(y>= 0 && y< 40){
-				if(change)
-					menuButtonClicked();
+				menuButtonClicked();
 				return true;
 			}
 			else{	
 				for(int i=0;i<buttons.length;i++){
 					if(y>=(i+1)*bgroesse && y<(i+1)*bgroesse+40){
 						buttonHitted=i;
-						if(visible && change)
+						if(visible)
 							buttons[i].callFunction(o.getX(),o.getY());
 						return true;					
 					}

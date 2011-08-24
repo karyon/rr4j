@@ -46,11 +46,6 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			return;
 		buttonPressed = arg0.getButton();
 		
-		if (arg0.getButton() == MouseEvent.BUTTON1) {
-			if(Menu.buttonHit(arg0.getX(),arg0.getY(),false))
-				return;
-			selection = new ArrayList<GameObject>();
-		}
 		mousePressedX = arg0.getX();
 		mousePressedY = arg0.getY();
 	}
@@ -62,24 +57,29 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			return;
 		buttonPressed = MouseEvent.NOBUTTON;
 		
+		if (arg0.getButton() == MouseEvent.BUTTON1) {
+			if (Menu.buttonHit(arg0.getX(),arg0.getY())){
+				return;
+			}
+			selection = new ArrayList<GameObject>();
+		}
 		
 		int[] selectionRect = getSelectionRect();
 		drawSelectionRect = false;
 		
 		//handle a small drag like a click.
 		if (selectionRect == null || selectionRect[2] + selectionRect[3] < 4) {
-			mouseClick(arg0.getX(), arg0.getY(), arg0.getButton());
+			mouseClick(arg0.getX() + Painter.getOffsetX(), arg0.getY() + Painter.getOffsetY(), arg0.getButton());
 			return;
 		}
 		
 		if (arg0.getButton() == MouseEvent.BUTTON1) {
-			multiSelect(selectionRect[0], selectionRect[1], selectionRect[2], selectionRect[3]);
+			multiSelect(selectionRect[0] + Painter.getOffsetX(), selectionRect[1] + Painter.getOffsetY(), selectionRect[2], selectionRect[3]);
 		}
 	}
 	
 	
 	private void mouseClick(int x, int y, int button) {
-		
 		if(button == MouseEvent.BUTTON1)
 			singleSelect(x, y);
 		else if (button == MouseEvent.BUTTON3) {
@@ -121,10 +121,6 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 * @param y
 	 */
 	private void singleSelect(int x, int y) {
-		
-		if(Menu.buttonHit(x,y,true)){
-			return;
-		}
 		
 		for (RockRaider r: RockRaider.getRockRaiderList()) {
 			if (r.intersects(x, y)) {

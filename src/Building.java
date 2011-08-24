@@ -17,12 +17,10 @@ public class Building extends GameObject{
 		buildingList.add(this);
 		nextID++;
 		
-		abilities = new boolean[5];
-		
-		
-		
+		abilities = new boolean[5];		
 		
 	}
+		
 	public static ArrayList<Building> getBuildingList(){
 		return buildingList;
 	}
@@ -30,4 +28,6 @@ public class Building extends GameObject{
 	public static int getSize(){
 		return size;
 	}
+	
+
 }

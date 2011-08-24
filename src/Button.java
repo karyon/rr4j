@@ -7,15 +7,15 @@ public class Button {
 	private int button; //buttonnumber
 	private boolean active; //true, if available for this object;
 	private Image img;
-	boolean visible;
+	private GameObject o;
 
 	
-	public Button(int type, int button, boolean active, boolean visible){
+	public Button(int type, int button, boolean active,GameObject o){
 		
-		this.visible = visible;
 		img = Toolkit.getDefaultToolkit().createImage("res/t"+type+"Button"+(button-1)+active+".png");
 		this.type = type;
 		this.button = button;
+		this.o=o;
 		this.setActive(active);
 	}
 	
@@ -33,7 +33,7 @@ public class Button {
 
 	public void callFunction(double x, double y) {
 		
-		if(type==1){
+		if(o.isRockRaider()){
 			if(button==1)
 				System.out.println("dig");
 			else if(button==2)
@@ -44,9 +44,10 @@ public class Button {
 				System.out.println("upgrade");
 			
 		}
-		else if(type==2){
-			if(button==1)
-				new RockRaider(x,y-RockRaider.getSize());
+		else if(o.isBuilding()){
+				if(o.isToolStore())
+					if(button==1)
+						ToolStore.spawnRockRaider(x, y-RockRaider.getSize());
 					
 		}
 		else if(type==3){

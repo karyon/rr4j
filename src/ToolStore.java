@@ -8,6 +8,8 @@ public class ToolStore extends Building {
 		
 	}
 	
-	
+	public static void spawnRockRaider(double x, double y){
+		new RockRaider(x,y);
+	}
 
 }

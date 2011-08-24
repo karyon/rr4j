@@ -47,6 +47,8 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		buttonPressed = arg0.getButton();
 		
 		if (arg0.getButton() == MouseEvent.BUTTON1) {
+			if(Menu.buttonHit(arg0.getX(),arg0.getY(),false))
+				return;
 			selection = new ArrayList<GameObject>();
 		}
 		mousePressedX = arg0.getX();
@@ -120,7 +122,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 */
 	private void singleSelect(int x, int y) {
 		
-		if(Menu.buttonHit(x,y)){
+		if(Menu.buttonHit(x,y,true)){
 			return;
 		}
 		

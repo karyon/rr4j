@@ -90,13 +90,14 @@ public class Menu {
 			visible=true;
 	}
 
-	public static boolean buttonHit(int x, int y) {
+	public static boolean buttonHit(int x, int y,boolean change) {
 		
 		
 		if(x>menuPos && x < Main.getPanelWidth()){
 		
 			if(y>= 0 && y< 40){
-				menuButtonClicked();
+				if(change)
+					menuButtonClicked();
 				return true;
 			}
 			else{	

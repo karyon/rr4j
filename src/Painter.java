@@ -121,4 +121,7 @@ public class Painter extends JPanel {
 	public static int getPanelWidth() {
 		return width;
 	}
+	public static int getPanelHeight() {
+		return height;
+	}
 }

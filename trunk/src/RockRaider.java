@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class RockRaider extends GameObject
 {
+	private GameObject carryLoad = this;
 	
 	/** The target coordinates this RockRaider is moving to. 
 	 * Equal to x and y if this RockRaider is not moving. */
@@ -55,6 +56,8 @@ public class RockRaider extends GameObject
 	 * @param ms
 	 */
 	public void update(int ms) {
+		carryLoad.setX(x);
+		carryLoad.setY(y);
 		if (timer > 0) {
 			timer -= ms;
 			if (timer <= 0) {
@@ -155,6 +158,7 @@ public class RockRaider extends GameObject
 	public void goToObjectJob(GameObject object){
 		int height = object.getHeight();
 		int width = object.getWidth();
+		System.out.println("Object taken");
 		if (x < object.x -size)
 			goToJob(object.x - size-2, object.y + 21);
 		else if (x > object.x + width)
@@ -165,14 +169,28 @@ public class RockRaider extends GameObject
 		
 	}
 	
+	public void takeObjectJob (final GameObject object){
+		
+		jobList.addJob(new Job(){
+			@Override
+			public void execute() {
+				RockRaider.this.carryLoad = object;
+				jobList.jobDoneExecuteNext();
+				
+			};
+			});
+	}
+	
 	/**
-	 * Method allows RockRaiders to take rescources based on the given kind of rescource while creating 2 goToJobs (one to the res one back to the ToolStore)
+	 * Method allows RockRaiders to take resources based on the given kind of resource while creating 2 goToJobs (one to the res one back to the ToolStore)
 	 * @param kind 1 = Ore, 0 = Meth
 	 * @param object
 	 */
 	public void takeRes (final int kind, final GameObject object) {
+		if (carryLoad == object) carryLoad = this;
 		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
 		goToJob(object.x, object.y );
+		takeObjectJob (object);
 		
 		goToObjectJob(Building.getBuildingList().get(0));
  System.out.println("da");
@@ -183,8 +201,10 @@ public class RockRaider extends GameObject
 				public void execute() {
 					Player.setOre(Player.getOre()+1);
 					System.out.println(Player.getOre());
+					carryLoad = RockRaider.this;
 					Ore.getOreList().remove(object);
 					jobList.jobDoneExecuteNext();
+					
 				}
 			});
 
@@ -193,6 +213,7 @@ public class RockRaider extends GameObject
 			@Override
 			public void execute() {
 				Player.setCrystal(Player.getCrystal()+1);
+				carryLoad = RockRaider.this;
 				Crystal.getCrystalList().remove(object);
 				System.out.println("bis hierhin?");
 				jobList.jobDoneExecuteNext();
@@ -303,6 +324,7 @@ public class RockRaider extends GameObject
 		//else{
 			tarX = x;
 			tarY = y;
+			carryLoad = this;
 			jobList.jobDoneCancelNext();
 		//}
 		

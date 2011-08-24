@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -22,7 +23,7 @@ public class Painter extends JPanel {
 	private static double speedX = 0;
 	private static double speedY = 0;
 	
-	private static final double maxSpeed = 100;
+	private static final double maxSpeed = 300;
 	
 	private static final int width = 800;
 	private static final int height = 600;
@@ -71,6 +72,15 @@ public class Painter extends JPanel {
 		}
 		
 		Menu.paint(g);
+		g.setColor(Color.RED);
+		List<Tile> t = AStar.nodes;
+		if (t != null) {
+			for (int i = 1; i < t.size(); i++) {
+				Tile last = t.get(i-1);
+				Tile curr = t.get(i);
+				g.drawLine((int) (last.x - offsetX) + 32, (int) (last.y - offsetY)+ 32, (int) (curr.x - offsetX)+ 32, (int) (curr.y - offsetY)+ 32);
+			}
+		}
 	}
 	
 	

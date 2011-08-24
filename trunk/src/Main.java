@@ -14,6 +14,7 @@ public class Main {
 		Tools.createTileset();
 		Tools.createImages();
 		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
+		AStar.main();
 		new ToolStore(4*Tile.getSize(),3*Tile.getSize(),1);
 		new Menu();
 		

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class Map {
 	private Tile[][] mapFields;
@@ -24,6 +26,17 @@ public class Map {
 		if (map != null)
 			return;
 		map = new Map(mapData);
+	}
+	
+	public ArrayList<Tile> getAdjacentTiles(Tile t) {
+		ArrayList<Tile> ret = new ArrayList<Tile>(4);
+		int x = (int) t.x / Tile.getSize();
+		int y = (int) t.y / Tile.getSize();
+		ret.add(mapFields[x-1][y]);
+		ret.add(mapFields[x][y-1]);
+		ret.add(mapFields[x+1][y]);
+		ret.add(mapFields[x][y+1]);
+		return ret;
 	}
 	
 	public static Map getMap() {

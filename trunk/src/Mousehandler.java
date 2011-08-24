@@ -139,6 +139,8 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			}
 		}
 		selection.add(Map.getMap().getTileAt(x, y));
+		
+		Menu.delSelected();
 	}	
 	
 	/**

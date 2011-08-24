@@ -42,6 +42,10 @@ public abstract class GameObject {
 		return this instanceof Building;
 	}
 	
+	public boolean isToolStore() {
+		return this instanceof ToolStore;
+	}
+	
 	public int getWidth() {
 		return width;
 	}

@@ -13,8 +13,6 @@ public class Menu {
 	private static boolean visible = true;
 	private static GameObject o;
 	private static int bgroesse;
-
-	
 	
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
@@ -51,26 +49,14 @@ public class Menu {
 	}	
 	
 	public static void createButtons(GameObject bm){
-		int c=0;
 		o=bm;
 		boolean[] abilities = bm.getAbilities();
 		
-		
-		if(bm.isRockRaider())  
-			c=1;
-		
-		if(bm.isBuilding())
-			c=2;
-		
-		if(bm.isTile())
-			c=3;
-			
-		buttons = new Button[abilities.length];
-		
+		buttons = new Button[abilities.length];	
 		
 		if(bm.isRockRaider()){
 			for(int i=0; i < abilities.length; i++){
-				buttons[i] = new Button(1, i+1, abilities[i],visible);
+				buttons[i] = new Button(1, i+1, abilities[i],o);
 			}
 			return;
 				
@@ -78,7 +64,7 @@ public class Menu {
 				
 		if(bm.isBuilding()) {
 			for(int i=0; i< abilities.length; i++){
-				buttons[i] = new Button(2, i+1,abilities[i], visible);
+				buttons[i] = new Button(2, i+1,abilities[i],o);
 			}
 			return;
 		}

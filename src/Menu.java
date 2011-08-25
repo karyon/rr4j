@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.image.ImageObserver;
 
 
 public class Menu {
@@ -13,6 +12,9 @@ public class Menu {
 	private static boolean visible = true;
 	private static GameObject o;
 	private static int bgroesse;
+	private static Button lastPressed;
+	private static boolean wait4klick=false;
+	private static boolean disaim=true;
 	
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
@@ -111,4 +113,28 @@ public class Menu {
 		
 	}
 	
+	public static void setLastPressed(Button lastPressed) {
+		Menu.lastPressed = lastPressed;
+	}
+
+	public static Button getLastPressed() {
+		return lastPressed;
+	}
+	
+	
+	public static void setWait4klick(boolean wait4klick) {
+		Menu.wait4klick = wait4klick;
+	}
+
+	public static boolean getWait4klick() {
+		return wait4klick;
+	}
+
+	public static void setDisaim(boolean disaim) {
+		Menu.disaim = disaim;
+	}
+
+	public static boolean getDisaim() {
+		return disaim;
+	}
 }

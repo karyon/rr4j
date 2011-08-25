@@ -25,81 +25,59 @@ import java.util.*;
  */
 public class AStar
  {
-	private class Path implements Comparable {
+	private class Path implements Comparable<Path> {
 		public Tile point;
 		public double f;
 		public double g;
 		public Path parent;
-
-		/**
-		 * Default c'tor.
-		 */
-		public Path() {
+		
+		
+		public Path(Tile point) {
+			this.point = point;
 			parent = null;
-			point = null;
 			g = f = 0.0;
 		}
 
 		public Path(Path parent, Tile point) {
 			this.parent = parent;
 			this.point = point;
-			g = parent.g + 1;
+			g = parent.g + g(parent.point, point);
 			f = f(this);
 		}
-
-		/**
-		 * Compare to another object using the total cost f.
-		 * 
-		 * @param o
-		 *            The object to compare to.
-		 * @see Comparable#compareTo()
-		 * @return <code>less than 0</code> This object is smaller than
-		 *         <code>0</code>; <code>0</code> Object are the same.
-		 *         <code>bigger than 0</code> This object is bigger than o.
-		 */
-		public int compareTo(Object o) {
-			Path p = (Path) o;
+		
+		
+		public int compareTo(Path p) {
 			return (int) (f - p.f);
 		}
-
-		/**
-		 * Get the last point on the path.
-		 * 
-		 * @return The last point visited by the path.
-		 */
-		public Tile getPoint() {
-			return point;
-		}
-
-		/**
-		 * Set the
-		 */
-		public void setPoint(Tile p) {
-			point = p;
-		}
 	}
+	
 
-	/**
-	 * Check if the current node is a goal for the problem.
-	 * 
-	 * @param node
-	 *            The node to check.
-	 * @return <code>true</code> if it is a goal, <code>false</else> otherwise.
-	 */
-	protected boolean isGoal(Tile node) {
-		return node == goal;
+
+	private PriorityQueue<Path> paths;
+	private HashMap<Tile, Double> mindists;
+	private double lastCost;
+	
+	public static List<Tile> nodes;
+	private Tile goal;
+	private List<Tile> result;
+	
+	
+	public AStar(Tile start, Tile goal) {
+		paths = new PriorityQueue<Path>();
+		mindists = new HashMap<Tile, Double>();
+		lastCost = 0.0;
+		this.goal = goal;
+		result = compute(start, goal);
 	}
 
 	/**
 	 * Cost for the operation to go to <code>to</code> from <code>from</from>.
 	 * 
-	 * @param from
-	 *            The node we are leaving.
-	 * @param to
-	 *            The node we are reaching.
-	 * @return The cost of the operation.
+	 * @param from 	The node we are leaving.
+	 * @param to 	The node we are reaching.
+	 * @return 		The cost of the operation.
 	 */
-	protected double g(Tile from, Tile to) {
+	private double g(Tile from, Tile to) {
 		return 1.0;
 	}
 
@@ -107,25 +85,36 @@ public class AStar
 	 * Estimated cost to reach a goal node. An admissible heuristic never gives
 	 * a cost bigger than the real one. <code>from</from>.
 	 * 
-	 * @param from
-	 *            The node we are leaving.
-	 * @param to
-	 *            The node we are reaching.
-	 * @return The estimated cost to reach an object.
+	 * @param from 	The node we are leaving.
+	 * @param to 	The node we are reaching.
+	 * @return 		The estimated cost to reach an object.
 	 */
-	protected double h(Tile from, Tile to) {
+	private double h(Tile from, Tile to) {
 		/* Use the Manhattan distance heuristic. */
 		return (Math.abs(from.x - to.x) + Math.abs(from.y - to.y))/64;
 	}
 
 	/**
+	 * Total cost function to reach the node <code>to</code> from
+	 * <code>from</code>.
+	 * 
+	 * The total cost is defined as: f(x) = g(x) + h(x).
+	 * 
+	 * @param from 	The node we are leaving.
+	 * @param to 	The node we are reaching.
+	 * @return 		The total cost.
+	 */
+	protected double f(Path p) {
+		return p.g + h(p.point, goal);
+	}
+
+	/**
 	 * Generate the successors for a given node.
 	 * 
-	 * @param node
-	 *            The node we want to expand.
-	 * @return A list of possible next steps.
+	 * @param node 	The node we want to expand.
+	 * @return 		A list of possible next steps.
 	 */
-	protected List<Tile> generateSuccessors(Path p) {
+	private List<Tile> generateSuccessors(Path p) {
 		List<Tile> ret = Map.getMap().getAdjacentTiles(p.point);
 		
 		for (int i = ret.size() - 1; i >= 0; i--) {
@@ -136,73 +125,23 @@ public class AStar
 		return ret;
 	}
 
-	private PriorityQueue<Path> paths;
-	private HashMap<Tile, Double> mindists;
-	private double lastCost;
-	private int expandedCounter;
-
-	/**
-	 * Check how many times a node was expanded.
-	 * 
-	 * @return A counter of how many times a node was expanded.
-	 */
-	public int getExpandedCounter() {
-		return expandedCounter;
-	}
-
-	/**
-	 * Default c'tor.
-	 */
-	public AStar() {
-		paths = new PriorityQueue<Path>();
-		mindists = new HashMap<Tile, Double>();
-		expandedCounter = 0;
-		lastCost = 0.0;
-	}
-
-	/**
-	 * Total cost function to reach the node <code>to</code> from
-	 * <code>from</code>.
-	 * 
-	 * The total cost is defined as: f(x) = g(x) + h(x).
-	 * 
-	 * @param from
-	 *            The node we are leaving.
-	 * @param to
-	 *            The node we are reaching.
-	 * @return The total cost.
-	 */
-	protected double f(Path p) {
-		return p.g + h(p.point, goal);
-	}
-
 	/**
 	 * Expand a path.
 	 * 
-	 * @param path
-	 *            The path to expand.
+	 * @param path 	The path to expand.
 	 */
 	private void expand(Path path) {
-		Double min = mindists.get(path.getPoint());
+		Double min = mindists.get(path.point);
 
-		/*
-		 * If a better path passing for this point already exists then don't
-		 * expand it.
-		 */
-		if (min == null || min.doubleValue() > path.f) {
-			mindists.put(path.getPoint(), path.f);
-//			System.out.println(mindists.size());
-		}
-		else {
+		//If a better path to this point already exists then don't expand it.
+		if (min == null || min.doubleValue() > path.f)
+			mindists.put(path.point, path.f);
+		else
 			return;
-		}
 
 		for (Tile t : generateSuccessors(path)) {
 			paths.offer(new Path(path, t));
-//			System.out.println(paths.size());
 		}
-
-		expandedCounter++;
 	}
 
 	/**
@@ -213,58 +152,54 @@ public class AStar
 	public double getCost() {
 		return lastCost;
 	}
+	
+	public List<Tile> getPath() {
+		return result;
+	}
 
 	/**
 	 * Find the shortest path to a goal starting from <code>start</code>.
 	 * 
-	 * @param start
-	 *            The initial node.
+	 * @param start The initial node.
 	 * @return A list of nodes from the initial point to a goal,
 	 *         <code>null</code> if a path doesn't exist.
 	 */
-	public List<Tile> compute(Tile start) {
-			Path root = new Path();
-			root.setPoint(start);
-			expand(root);
+	public List<Tile> compute(Tile start, Tile goal) {
+		this.goal = goal;
+		Path root = new Path(start);
+		expand(root);
 
-			while (!paths.isEmpty()) {
-				Path p = paths.poll();
+		while (!paths.isEmpty()) {
+			Path p = paths.poll();
 
-				Tile last = p.getPoint();
+			Tile last = p.point;
 
-				lastCost = p.f;
+			lastCost = p.f;
 
-				if (isGoal(last)) {
-					LinkedList<Tile> retPath = new LinkedList<Tile>();
-					
-					for (Path i = p; i != null; i = i.parent) {
-						retPath.addFirst(i.getPoint());
-					}
-					return retPath;
+			if (last == goal) {
+				LinkedList<Tile> retPath = new LinkedList<Tile>();
+				
+				for (Path i = p; i != null; i = i.parent) {
+					retPath.addFirst(i.point);
 				}
-				expand(p);
+				retPath.removeFirst();
+				nodes = retPath;
+				return retPath;
 			}
+			expand(p);
+		}
 		return null;
 	}
 	
-	public static List<Tile> nodes;
-	public static Tile goal;
 	public static void main() {
-
-		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
-		goal = Map.getMap().getTileAt(14 * 64 + 1, 36 * 64 + 1);
 		
-		
-		AStar pf = new AStar();
-
 		long begin = System.nanoTime();
 
-		nodes = pf.compute(Map.getMap().getTileAt(3 * 64 + 1, 10 * 64 + 1));
+		AStar pf = new AStar(Map.getMap().getMapFields()[3][10], Map.getMap().getMapFields()[14][36]);
 
 		long end = System.nanoTime();
 
 		System.out.println("Time = " + (end - begin) + " ms");
-		System.out.println("Expanded = " + pf.getExpandedCounter());
 		System.out.println("Cost = " + pf.getCost());
 
 		if (nodes == null)

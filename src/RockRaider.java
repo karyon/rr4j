@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class RockRaider extends GameObject
@@ -82,12 +83,9 @@ public class RockRaider extends GameObject
 		
 		
 		if (this.intersectsUnpassableObject()!=null) {
-			
-			GameObject unpassableObject = this.intersectsUnpassableObject();
 			// one step back, then stop.
 			x -= distX / ratio;
 			y -= distY / ratio;
-			findPath(unpassableObject,ratio);
 			return;
 		}
 		
@@ -146,13 +144,17 @@ public class RockRaider extends GameObject
 	 */
 	public void goToJob(final double x, final double y) {
 		
-		
+		List<Tile> path = new AStar(Map.getMap().getTileAt(RockRaider.this.x, RockRaider.this.y), Map.getMap().getTileAt(x, y)).getPath();
+		if (path == null)
+			return;
+		for (final Tile t: path) {
 			jobList.addJob(new Job() {
-			@Override
-			public void execute() {
-				RockRaider.this.setTarget(x, y);
-			}
-		});
+				@Override
+				public void execute() {
+					RockRaider.this.setTarget(t.x+20, t.y+20);
+				}
+			});
+		}
 	}
 	
 	public void goToObjectJob(GameObject object){
@@ -244,6 +246,7 @@ public class RockRaider extends GameObject
 	private void setTarget(double x, double y) {
 		tarX = x;
 		tarY = y;
+		System.out.println(x + " " + y);
 	}
 	
 	private void setTimer(int ms) {
@@ -270,17 +273,13 @@ public class RockRaider extends GameObject
 	 * @param t The Tile this RockRaider should goTo and destroy.
 	 */
 	public void goToAndDestroy(Tile t) {
+		System.out.println("goToAndDestroy aufgerufen");
 		jobList.cancelAll();
 		//goTo the Tile t
 		switch (t.getType()) {
 		case Tile.TYPE_DIRT:
 		case Tile.TYPE_LOOSE_ROCK:
-			if (x < t.x - size)
-				goToJob(t.x - size-2, t.y + 21);
-			else if (x > t.x + Tile.getSize())
-				goToJob(t.x + Tile.getSize()+2, t.y + 21);
-			else 
-				goToJob(t.x + 20, (y < t.y) ?  t.y - size - 2 : t.y + Tile.getSize() + 2);
+			goToObjectJob(t);
 			break;
 		case Tile.TYPE_RUBBLE:
 			goToJob(t.x + 10, t.y + 10);
@@ -307,28 +306,6 @@ public class RockRaider extends GameObject
 			}
 		});
 	}
-	
-	public void findPath(GameObject object, double ratio) {
-		
-		
-		
-		
-		/*if(object.isRockRaider()) {
-			
-			double otherX = object.getX();
-			double otherY = object.getY();
-			
-						
-			
-		}*/
-		//else{
-			tarX = x;
-			tarY = y;
-			carryLoad = this;
-			jobList.jobDoneCancelNext();
-		//}
-		
-	} 
 	
 	
 	public static int getSize() {

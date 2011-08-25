@@ -24,7 +24,6 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	private static boolean drawSelectionRect = false;
 	
 	
-	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
@@ -61,7 +60,8 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			if (Menu.buttonHit(arg0.getX(),arg0.getY())){
 				return;
 			}
-			selection = new ArrayList<GameObject>();
+			if(!Menu.getDisaim())
+				selection = new ArrayList<GameObject>();
 		}
 		
 		int[] selectionRect = getSelectionRect();
@@ -139,6 +139,14 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		}
 		selection.add(Map.getMap().getTileAt(x, y));
 		
+
+		if(Menu.getWait4klick() && selection.get(0).isTile()){
+			Menu.getLastPressed().doit();
+			selection = new ArrayList<GameObject>();
+			selection.add(Menu.getLastPressed().getObject());
+			return;
+		}
+		
 		Menu.delSelected();
 	}	
 	
@@ -193,6 +201,10 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		int width = (mousePressedX >= mouseCurrX) ? mousePressedX - startX: mouseCurrX - startX;
 		int height = (mousePressedY >= mouseCurrY) ? mousePressedY - startY: mouseCurrY - startY;
 		return new int[] {startX, startY, width, height};
+	}
+	
+	public static ArrayList<GameObject> getSelection(){
+		return selection;
 	}
 	
 }

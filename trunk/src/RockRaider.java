@@ -136,6 +136,18 @@ public class RockRaider extends GameObject
 		
 	}
 	
+	
+	public void goToJob(List<Tile> path) {
+		for (final Tile t: path) {
+			jobList.addJob(new Job() {
+				@Override
+				public void execute() {
+					RockRaider.this.setTarget(t.x+20, t.y+20);
+				}
+			});
+		}
+	}
+	
 	/**
 	 * Adds a new Job to jobList, which sets the target of this 
 	 * RockRaider to the specified coordinates. 
@@ -147,28 +159,22 @@ public class RockRaider extends GameObject
 		List<Tile> path = new AStar(Map.getMap().getTileAt(RockRaider.this.x, RockRaider.this.y), Map.getMap().getTileAt(x, y)).getPath();
 		if (path == null)
 			return;
-		for (final Tile t: path) {
-			jobList.addJob(new Job() {
-				@Override
-				public void execute() {
-					RockRaider.this.setTarget(t.x+20, t.y+20);
-				}
-			});
-		}
+		goToJob(path);
+		
 	}
+	
 	
 	public void goToObjectJob(GameObject object){
 		int height = object.getHeight();
 		int width = object.getWidth();
 		System.out.println("Object taken");
-		if (x < object.x -size)
-			goToJob(object.x - size-2, object.y + 21);
-		else if (x > object.x + width)
-			goToJob(object.x + width+2, object.y + 21);
-		else 
-			goToJob(object.x + 20, (y < object.y) ?  object.y - size - 2 : object.y + height + 2);
-		
-		
+		ArrayList<Tile> possibleTargets = new ArrayList<Tile>();
+		possibleTargets.add(Map.getMap().getTileAt(object.x - size-2, object.y + 21));
+		possibleTargets.add(Map.getMap().getTileAt(object.x + width+2, object.y + 21));
+		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y - size - 2));
+		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y + height + 2));
+		AStar path = new AStar(Map.getMap().getTileAt(x, y), possibleTargets);
+		goToJob(path.getPath());
 	}
 	
 	public void takeObjectJob (final GameObject object){
@@ -177,6 +183,7 @@ public class RockRaider extends GameObject
 			@Override
 			public void execute() {
 				RockRaider.this.carryLoad = object;
+				goToObjectJob(Building.getBuildingList().get(0));
 				jobList.jobDoneExecuteNext();
 				
 			};
@@ -193,9 +200,6 @@ public class RockRaider extends GameObject
 		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
 		goToJob(object.x, object.y );
 		takeObjectJob (object);
-		
-		goToObjectJob(Building.getBuildingList().get(0));
- System.out.println("da");
 		switch (kind){
 		case 1:
 			jobList.addJob(new Job(){

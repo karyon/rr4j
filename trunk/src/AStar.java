@@ -16,7 +16,11 @@
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * A* algorithm implementation using the method design pattern.
@@ -53,27 +57,45 @@ public class AStar
 	
 
 
-	private PriorityQueue<Path> paths;
-	private HashMap<Tile, Double> mindists;
-	private double lastCost;
+	private final PriorityQueue<Path> openList = new PriorityQueue<Path>();
+	private final HashMap<Tile, Double> mindists = new HashMap<Tile, Double>();
+	private double lastCost = 0.0;
 	
-	public static List<Tile> nodes;
 	private Tile goal;
 	private List<Tile> result;
 	
-	
+	/**
+	 * Computes and saves the shortest path from start to goal.
+	 * @param start
+	 * @param goal
+	 */
 	public AStar(Tile start, Tile goal) {
-		paths = new PriorityQueue<Path>();
-		mindists = new HashMap<Tile, Double>();
-		lastCost = 0.0;
-		this.goal = goal;
 		result = compute(start, goal);
+	}
+	
+	/**
+	 * Computes the shortest paths from start to all goals and saves the shortest one.
+	 * @param start
+	 * @param goals
+	 */
+	public AStar(Tile start, List<Tile> goals) {
+		//TODO could be optimized by defining one isGoal function, defining one
+		//point for the h() function and calling compute only once
+		double bestCost = Double.MAX_VALUE;
+		for (Tile t: goals) {
+			List<Tile> temp = compute(start, t);
+			if (lastCost < bestCost) {
+				result = temp;
+				bestCost = lastCost;
+			}
+		}
+		lastCost = bestCost;
 	}
 
 	/**
 	 * Cost for the operation to go to <code>to</code> from <code>from</from>.
 	 * 
-	 * @param from 	The node we are leaving.
+	 * @param from 	The tile we are leaving.
 	 * @param to 	The node we are reaching.
 	 * @return 		The cost of the operation.
 	 */
@@ -82,51 +104,27 @@ public class AStar
 	}
 
 	/**
-	 * Estimated cost to reach a goal node. An admissible heuristic never gives
-	 * a cost bigger than the real one. <code>from</from>.
+	 * Minimum/best-case cost to reach the goal tile.
+	 * Uses the Manhattan distance heuristic. 
 	 * 
 	 * @param from 	The node we are leaving.
-	 * @param to 	The node we are reaching.
-	 * @return 		The estimated cost to reach an object.
+	 * @return 		The estimated cost to reach the goal node.
 	 */
-	private double h(Tile from, Tile to) {
-		/* Use the Manhattan distance heuristic. */
-		return (Math.abs(from.x - to.x) + Math.abs(from.y - to.y))/64;
+	private double h(Tile from) {
+		return (Math.abs(from.x - goal.x) + Math.abs(from.y - goal.y))/64;
 	}
 
 	/**
-	 * Total cost function to reach the node <code>to</code> from
-	 * <code>from</code>.
+	 * Total cost function to reach the goal from the start via the specified path.
 	 * 
 	 * The total cost is defined as: f(x) = g(x) + h(x).
-	 * 
-	 * @param from 	The node we are leaving.
-	 * @param to 	The node we are reaching.
-	 * @return 		The total cost.
 	 */
-	protected double f(Path p) {
-		return p.g + h(p.point, goal);
+	private double f(Path p) {
+		return p.g + h(p.point);
 	}
 
 	/**
-	 * Generate the successors for a given node.
-	 * 
-	 * @param node 	The node we want to expand.
-	 * @return 		A list of possible next steps.
-	 */
-	private List<Tile> generateSuccessors(Path p) {
-		List<Tile> ret = Map.getMap().getAdjacentTiles(p.point);
-		
-		for (int i = ret.size() - 1; i >= 0; i--) {
-			if (!ret.get(i).isWalkable() || (p.parent != null && ret.get(i) == p.parent.point))
-				ret.remove(i);
-		}
-
-		return ret;
-	}
-
-	/**
-	 * Expand a path.
+	 * Expands a path.
 	 * 
 	 * @param path 	The path to expand.
 	 */
@@ -138,14 +136,19 @@ public class AStar
 			mindists.put(path.point, path.f);
 		else
 			return;
-
-		for (Tile t : generateSuccessors(path)) {
-			paths.offer(new Path(path, t));
+		
+		
+		ArrayList<Tile> successors = Map.getMap().getAdjacentTiles(path.point);
+		successors.remove(path.parent.point); //don't go back to the parent
+		
+		for (Tile t : successors) {
+			if (t.isWalkable())
+				openList.offer(new Path(path, t));
 		}
 	}
 
 	/**
-	 * Get the cost to reach the last node in the path.
+	 * Returns the cost to reach the last tile in the path.
 	 * 
 	 * @return The cost for the found path.
 	 */
@@ -153,62 +156,48 @@ public class AStar
 		return lastCost;
 	}
 	
+	/**
+	 * Returns the computed path.
+	 * 
+	 * @return the computed path.
+	 */
 	public List<Tile> getPath() {
 		return result;
 	}
 
 	/**
-	 * Find the shortest path to a goal starting from <code>start</code>.
+	 * Finds and returns the shortest path from start to goal.
 	 * 
-	 * @param start The initial node.
-	 * @return A list of nodes from the initial point to a goal,
+	 * @param start The initial tile.
+	 * @param goal The goal tile.
+	 * @return A list of tiles from the initial point to a goal,
 	 *         <code>null</code> if a path doesn't exist.
 	 */
-	public List<Tile> compute(Tile start, Tile goal) {
+	private List<Tile> compute(Tile start, Tile goal) {
+		if (!goal.isWalkable())
+			return null;
 		this.goal = goal;
+		//expand the first tile manually
 		Path root = new Path(start);
-		expand(root);
+		for (Tile t : Map.getMap().getAdjacentTiles(start)) {
+			if (t.isWalkable())
+				openList.offer(new Path(root, t));
+		}
 
-		while (!paths.isEmpty()) {
-			Path p = paths.poll();
-
-			Tile last = p.point;
-
-			lastCost = p.f;
-
-			if (last == goal) {
+		while (!openList.isEmpty()) {
+			Path p = openList.poll();
+			
+			if (p.point == goal) {
+				lastCost = p.f;
 				LinkedList<Tile> retPath = new LinkedList<Tile>();
 				
-				for (Path i = p; i != null; i = i.parent) {
+				for (Path i = p; i.parent != null; i = i.parent) {
 					retPath.addFirst(i.point);
 				}
-				retPath.removeFirst();
-				nodes = retPath;
 				return retPath;
 			}
 			expand(p);
 		}
 		return null;
-	}
-	
-	public static void main() {
-		
-		long begin = System.nanoTime();
-
-		AStar pf = new AStar(Map.getMap().getMapFields()[3][10], Map.getMap().getMapFields()[14][36]);
-
-		long end = System.nanoTime();
-
-		System.out.println("Time = " + (end - begin) + " ms");
-		System.out.println("Cost = " + pf.getCost());
-
-		if (nodes == null)
-			System.out.println("No path");
-		else {
-			System.out.print("Path = ");
-			for (Tile n : nodes)
-				System.out.print(n);
-			System.out.println();
-		}
 	}
 }

@@ -72,15 +72,6 @@ public class Painter extends JPanel {
 		}
 		
 		Menu.paint(g);
-		g.setColor(Color.RED);
-		List<Tile> t = AStar.nodes;
-		if (t != null) {
-			for (int i = 1; i < t.size(); i++) {
-				Tile last = t.get(i-1);
-				Tile curr = t.get(i);
-				g.drawLine((int) (last.x - offsetX) + 32, (int) (last.y - offsetY)+ 32, (int) (curr.x - offsetX)+ 32, (int) (curr.y - offsetY)+ 32);
-			}
-		}
 	}
 	
 	

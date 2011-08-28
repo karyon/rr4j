@@ -90,6 +90,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 					if(o.intersects(x, y)){
 						objectCollision = true;
 						r.takeRes(1, o); 
+						return;
 					}
 				}
 				for (Crystal c: Crystal.getCrystalList()) {
@@ -97,6 +98,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 						objectCollision = true;
 						r.takeRes(0, c);
 						System.out.println("ololol");
+						return;
 					}
 				}
 				if (objectCollision == false){
@@ -174,7 +176,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	 */
 	public void moveSelected(int x, int y) { 		
 		for(GameObject r: selection) {
-			((RockRaider) r).goToJob(x - 10, y - 10);
+			((RockRaider) r).goToJob(x - 10, y - 10, true);
 		}
 	}
 	

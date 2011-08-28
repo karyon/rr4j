@@ -59,7 +59,7 @@ public class AStar
 
 	private final PriorityQueue<Path> openList = new PriorityQueue<Path>();
 	private final HashMap<Tile, Double> mindists = new HashMap<Tile, Double>();
-	private double lastCost = 0.0;
+	private double lastCost = Double.MAX_VALUE;
 	
 	private Tile goal;
 	private List<Tile> result;
@@ -176,6 +176,10 @@ public class AStar
 	private List<Tile> compute(Tile start, Tile goal) {
 		if (!goal.isWalkable())
 			return null;
+		if (start == goal) {
+			lastCost = 0;
+			return new LinkedList<Tile>();
+		}
 		this.goal = goal;
 		//expand the first tile manually
 		Path root = new Path(start);

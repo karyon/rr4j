@@ -139,10 +139,17 @@ public class RockRaider extends GameObject
 	
 	public void goToJob(List<Tile> path) {
 		for (final Tile t: path) {
+//			System.out.println("New job added: goTo " + (t.x+20) + ", " + (t.y+20));
 			jobList.addJob(new Job() {
 				@Override
 				public void execute() {
 					RockRaider.this.setTarget(t.x+20, t.y+20);
+				}
+				@Override
+				public void cancel() {
+					RockRaider r = RockRaider.this;
+					r.setTarget(r.x, r.y);
+					r.carryLoad = r;
 				}
 			});
 		}
@@ -154,17 +161,19 @@ public class RockRaider extends GameObject
 	 * @param x
 	 * @param y
 	 */
-	public void goToJob(final double x, final double y) {
+	public boolean goToJob(final double x, final double y, boolean cancel) {
+		if (cancel)
+			jobList.cancelAll();
 		
 		List<Tile> path = new AStar(Map.getMap().getTileAt(RockRaider.this.x, RockRaider.this.y), Map.getMap().getTileAt(x, y)).getPath();
 		if (path == null)
-			return;
+			return false;
 		goToJob(path);
-		
+		return true;
 	}
 	
 	
-	public void goToObjectJob(GameObject object){
+	public boolean goToObjectJob(GameObject object){
 		int height = object.getHeight();
 		int width = object.getWidth();
 		System.out.println("Object taken");
@@ -173,8 +182,11 @@ public class RockRaider extends GameObject
 		possibleTargets.add(Map.getMap().getTileAt(object.x + width+2, object.y + 21));
 		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y - size - 2));
 		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y + height + 2));
-		AStar path = new AStar(Map.getMap().getTileAt(x, y), possibleTargets);
-		goToJob(path.getPath());
+		List<Tile> path = new AStar(Map.getMap().getTileAt(x, y), possibleTargets).getPath();
+		if (path == null)
+			return false;
+		goToJob(path);
+		return true;
 	}
 	
 	public void takeObjectJob (final GameObject object){
@@ -183,7 +195,6 @@ public class RockRaider extends GameObject
 			@Override
 			public void execute() {
 				RockRaider.this.carryLoad = object;
-				goToObjectJob(Building.getBuildingList().get(0));
 				jobList.jobDoneExecuteNext();
 				
 			};
@@ -198,36 +209,44 @@ public class RockRaider extends GameObject
 	public void takeRes (final int kind, final GameObject object) {
 		if (carryLoad == object) carryLoad = this;
 		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
-		goToJob(object.x, object.y );
+		if (!goToJob(object.x, object.y , false))
+			return;
 		takeObjectJob (object);
-		switch (kind){
-		case 1:
-			jobList.addJob(new Job(){
-				@Override
-				public void execute() {
-					Player.setOre(Player.getOre()+1);
-					System.out.println(Player.getOre());
-					carryLoad = RockRaider.this;
-					Ore.getOreList().remove(object);
-					jobList.jobDoneExecuteNext();
+		jobList.addJob(new Job(){
+			public void execute() {
+				if (!goToObjectJob(Building.getBuildingList().get(0)))
+					return;
+				switch (kind){
+				case 1:
+					jobList.addJob(new Job(){
+						@Override
+						public void execute() {
+							Player.setOre(Player.getOre()+1);
+							System.out.println(Player.getOre());
+							carryLoad = RockRaider.this;
+							Ore.getOreList().remove(object);
+							jobList.jobDoneExecuteNext();
+							
+						}
+					});
+		
+					break;
+				case 0:jobList.addJob(new Job(){
+					@Override
+					public void execute() {
+						Player.setCrystal(Player.getCrystal()+1);
+						carryLoad = RockRaider.this;
+						Crystal.getCrystalList().remove(object);
+						System.out.println("bis hierhin?");
+						jobList.jobDoneExecuteNext();
+						}
+					});
+					break;
 					
 				}
-			});
-
-			break;
-		case 0:jobList.addJob(new Job(){
-			@Override
-			public void execute() {
-				Player.setCrystal(Player.getCrystal()+1);
-				carryLoad = RockRaider.this;
-				Crystal.getCrystalList().remove(object);
-				System.out.println("bis hierhin?");
 				jobList.jobDoneExecuteNext();
-				}
-			});
-			break;
-			
-		}
+			}
+		});
 		
 	}
 		
@@ -283,10 +302,12 @@ public class RockRaider extends GameObject
 		switch (t.getType()) {
 		case Tile.TYPE_DIRT:
 		case Tile.TYPE_LOOSE_ROCK:
-			goToObjectJob(t);
+			if (!goToObjectJob(t))
+				return;
 			break;
 		case Tile.TYPE_RUBBLE:
-			goToJob(t.x + 10, t.y + 10);
+			if (!goToJob(t.x + 10, t.y + 10, false))
+				return;
 			break;
 		default: return;
 		}

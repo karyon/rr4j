@@ -69,7 +69,12 @@ public class Button {
 			
 		}
 		else if(o.isBuilding()){
-			if(button == 1){}
+			if(button == 0){
+				((Building)o).destroyBuilding();
+				Menu.setDestroyClicked(true);
+				
+			
+			}
 				if(o.isToolStore())
 					if(button==1)
 						((ToolStore)o).spawnRockRaider();

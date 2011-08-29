@@ -26,6 +26,13 @@ public class Building extends GameObject{
 	public static int getSize(){
 		return size;
 	}
+
+	public void destroyBuilding() {
+		// TODO Auto-generated method stub
+		buildingList.remove(this);
+		Mousehandler.clearSelection();
+		
+	}
 	
 
 }

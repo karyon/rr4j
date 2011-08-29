@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -11,8 +10,8 @@ public class Painter extends JPanel {
 	private static double offsetX = 300;
 	private static double offsetY = 300;
 	
-	private static double speedX = 0;
-	private static double speedY = 0;
+	private double speedX = 0;
+	private double speedY = 0;
 	
 	private static final double maxSpeed = 300;
 	
@@ -23,6 +22,7 @@ public class Painter extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		Tile[][] mapFields = Map.getMap().getMapFields();
+		Image[] tileImages = Tools.getTileImages();
 		int tileSize = Tile.getSize();
 		for (int x = 0; x < mapFields.length; x++) {
 			for (int y = 0; y < mapFields[0].length; y++) {
@@ -38,7 +38,7 @@ public class Painter extends JPanel {
 				case Tile.TYPE_WATER:        tileImageID = 1; break;
 				default:                     tileImageID = -1;
 				}
-				drawImage(g, Tools.getTileImages()[tileImageID], x * tileSize, y * tileSize);
+				drawImage(g, tileImages[tileImageID], x * tileSize, y * tileSize);
 			}
 		}
 
@@ -56,7 +56,7 @@ public class Painter extends JPanel {
 		for (Crystal c: Crystal.getCrystalList())
 			drawImage(g, Tools.getCrystalImage(), c.getX(), c.getY());
 		
-		int[] selectionRect = Mousehandler.getSelectionRect();
+		int[] selectionRect = MouseEventListener.getSelectionRect();
 		if (selectionRect != null) {
 			g.setColor(Color.WHITE);
 			g.drawRect(selectionRect[0], selectionRect[1], selectionRect[2], selectionRect[3]);
@@ -66,12 +66,18 @@ public class Painter extends JPanel {
 	}
 	
 	
-	private void drawImage(Graphics g, Image img, double x, double y) {
+	private static void drawImage(Graphics g, Image img, double x, double y) {
+		int height = img.getHeight(null);
+		int width = img.getWidth(null);
 		//zwei casts, da sonst bei negativen ergebnissen merkwuerdigkeiten auftreten
-		g.drawImage(img, (int)(x - (int) offsetX), (int)(y - (int) offsetY), null);
+		int x2 = (int)(x - (int) offsetX);
+		int y2 = (int)(y - (int) offsetY);
+//		if (-x2 > width || -y2 > height || x2 > Painter.width || y2 > Painter.height)
+//			return;
+		g.drawImage(img, x2, y2, null);
 	}
 	
-	public static void update(int ms) {
+	public void update(int ms) {
 		if (KeyHandler.isUp())
 			speedY = -maxSpeed;
 		else if (KeyHandler.isDown())

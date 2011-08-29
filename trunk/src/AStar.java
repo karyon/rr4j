@@ -71,6 +71,7 @@ public class AStar
 	 */
 	public AStar(Tile start, Tile goal) {
 		result = compute(start, goal);
+		System.out.println("hi");
 	}
 	
 	/**
@@ -90,6 +91,7 @@ public class AStar
 			}
 		}
 		lastCost = bestCost;
+		System.out.println("hi2");
 	}
 
 	/**

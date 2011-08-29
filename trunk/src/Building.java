@@ -30,7 +30,7 @@ public class Building extends GameObject{
 	public void destroyBuilding() {
 		// TODO Auto-generated method stub
 		buildingList.remove(this);
-		Mousehandler.clearSelection();
+		MouseHandler.clearSelection();
 		
 	}
 	

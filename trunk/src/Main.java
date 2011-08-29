@@ -5,9 +5,8 @@ import javax.swing.*;
 
 
 public class Main {
-	private static JFrame frame;
+	private static Painter painter;
 	private static final int FPS = 60;
-	private static long timeOfLastUpdate;
 	private static boolean isRunning = true;
 	
 	public static void main(String args[]) {
@@ -32,41 +31,44 @@ public class Main {
 		
 		createWindowAndPainter();
 		
-		timeOfLastUpdate = System.currentTimeMillis() - 16;
+		long timeOfLastUpdate = System.currentTimeMillis() - 16;
 		while(isRunning) {
-			doGamePlay((int)(System.currentTimeMillis() - timeOfLastUpdate));
-			frame.repaint();
-			long updateTime  = System.currentTimeMillis() - timeOfLastUpdate; //wie lange das update gebraucht hat
-			updateTime = Math.max(0, updateTime);
+			long frameBegin = System.currentTimeMillis();
+			
+			doGamePlay((int)(frameBegin - timeOfLastUpdate));
+			painter.repaint();
+			
+			long timeTaken = System.currentTimeMillis() - frameBegin;
+			long sleepTime  = Math.max(0, 1000/FPS - timeTaken);
 			try {
-				Thread.sleep(1000/FPS - updateTime);
+				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			timeOfLastUpdate = frameBegin;
 		}
 	}
 	
 	private static void doGamePlay(int ms) {
-		timeOfLastUpdate = System.currentTimeMillis();
 		//do all updates here
 		RockRaider.updateAll(ms);
-		Painter.update(ms);
+		painter.update(ms);
 	}
 	
 	
 	private static void createWindowAndPainter() {
-		Painter p = new Painter();
+		painter = new Painter();
 		
-		Mousehandler m = new Mousehandler();
-		p.addMouseListener(m);
-		p.addMouseMotionListener(m);
+		MouseEventListener m = new MouseEventListener();
+		painter.addMouseListener(m);
+		painter.addMouseMotionListener(m);
 		
-		frame = new JFrame("Testfenster");
+		JFrame frame = new JFrame("Testfenster");
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.setLocationRelativeTo(null); //topleft corner of the window, -> at center of screen
 		frame.setResizable(false);
-		frame.add(p);
+		frame.add(painter);
 		frame.pack();
 		frame.setVisible(true);
 		frame.repaint();

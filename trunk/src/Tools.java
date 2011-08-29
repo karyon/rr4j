@@ -31,8 +31,9 @@ public class Tools {
 	 * @param input
 	 * @return
 	 */
-	public static int[][] parseData(String input) {
-		String[] lines = input.split("\n");
+	public static int[][] loadMap() {
+		String data = loadFile("testmap.txt");
+		String[] lines = data.split("\n");
 		
 		int height = lines.length;
 		int width = lines[0].split(" ").length;
@@ -53,7 +54,7 @@ public class Tools {
 	 * @param filename
 	 * @return
 	 */
-	public static String loadFile(String filename)
+	private static String loadFile(String filename)
 	{	
 		String world="";
 		File file = new File("res/"+filename);

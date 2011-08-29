@@ -30,7 +30,7 @@ public class Menu {
 			for(int i=0;i<buttons.length;i++){
 				Button b=buttons[i];
 				if(b.getImage() != null)
-					g.drawImage(b.getImage(),menuPos,(i+1)*bgroesse,null);	
+					g.drawImage(b.getImage(),menuPos,(buttons.length-i)*bgroesse,null);	
 			}
 		}
 		
@@ -101,7 +101,7 @@ public class Menu {
 			}
 			else{	
 				for(int i=0;i<buttons.length;i++){
-					if(y>=(i+1)*bgroesse && y<(i+1)*bgroesse+40){
+					if(y>=(buttons.length-(i))*bgroesse && y<(buttons.length-(i))*bgroesse+40){
 						if(visible)
 							buttons[i].callFunction(o.getX(),o.getY());
 						return true;					

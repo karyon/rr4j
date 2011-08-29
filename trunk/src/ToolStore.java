@@ -7,13 +7,20 @@ public class ToolStore extends Building {
 
 		abilities = new boolean[5];
 		abilities[0]=true;
+		abilities[1]=true;
 		for(int i=1;i<abilities.length;i++){
 			abilities[i]=false;
 		}		
 	}
 	
-	public static void spawnRockRaider(double x, double y){
-		new RockRaider(x,y);
+	public void spawnRockRaider(){
+		new RockRaider(x,y-RockRaider.getSize());
+		System.out.println("SPAAAAWN");
+	}
+	
+	public void destroyToolbox () {
+		Building.buildingList.remove(ID); 
+		
 	}
 
 }

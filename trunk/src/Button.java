@@ -69,10 +69,14 @@ public class Button {
 			
 		}
 		else if(o.isBuilding()){
+			if(button == 1){}
 				if(o.isToolStore())
 					if(button==1)
-						ToolStore.spawnRockRaider(x, y-RockRaider.getSize());
+						((ToolStore)o).spawnRockRaider();
 					
+				    
+				
+				
 		}
 		else if(type==3){
 			

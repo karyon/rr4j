@@ -9,6 +9,7 @@ public class JobList {
 		list.add(job);
 		if (list.size() == 1)
 			job.execute();
+		
 	}
 	
 	public void jobDoneExecuteNext() {

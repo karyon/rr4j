@@ -91,6 +91,7 @@ public class Menu {
 
 	public static boolean buttonHit(int x, int y) {
 		
+		disaim=true;
 		
 		if(x>menuPos && x < Painter.getPanelWidth()){
 		

@@ -60,7 +60,7 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 			if (Menu.buttonHit(arg0.getX(),arg0.getY())){
 				return;
 			}
-			if(!Menu.getDisaim())
+			if(Menu.getDisaim())
 				selection = new ArrayList<GameObject>();
 		}
 		

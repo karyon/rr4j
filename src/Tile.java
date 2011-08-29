@@ -32,10 +32,6 @@ public class Tile extends GameObject{
 		return type;
 	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	public boolean isWalkable() {
 		return walkable;
 	}

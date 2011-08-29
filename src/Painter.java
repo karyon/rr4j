@@ -8,15 +8,6 @@ import javax.swing.JPanel;
 
 
 public class Painter extends JPanel {
-	
-	public static final int DIRECTION_NONE = 0;
-	public static final int DIRECTION_UP = 1;
-	public static final int DIRECTION_DOWN = 2;
-	public static final int DIRECTION_LEFT = 3;
-	public static final int DIRECTION_RIGHT = 4;
-	
-	private static int direction = DIRECTION_NONE;
-	
 	private static double offsetX = 300;
 	private static double offsetY = 300;
 	
@@ -29,7 +20,7 @@ public class Painter extends JPanel {
 	private static final int height = 600;
 	
 	
-	
+	@Override
 	public void paintComponent(Graphics g) {
 		Tile[][] mapFields = Map.getMap().getMapFields();
 		int tileSize = Tile.getSize();
@@ -75,20 +66,25 @@ public class Painter extends JPanel {
 	}
 	
 	
-	public void drawImage(Graphics g, Image img, double x, double y) {
+	private void drawImage(Graphics g, Image img, double x, double y) {
 		//zwei casts, da sonst bei negativen ergebnissen merkwuerdigkeiten auftreten
 		g.drawImage(img, (int)(x - (int) offsetX), (int)(y - (int) offsetY), null);
 	}
 	
 	public static void update(int ms) {
+		if (KeyHandler.isUp())
+			speedY = -maxSpeed;
+		else if (KeyHandler.isDown())
+			speedY = maxSpeed;
+		else
+			speedY = 0;
 		
-		switch (direction) {
-		case DIRECTION_UP: speedY = -maxSpeed; break;
-		case DIRECTION_DOWN: speedY = maxSpeed; break;
-		case DIRECTION_LEFT: speedX = -maxSpeed; break;
-		case DIRECTION_RIGHT: speedX = maxSpeed; break;
-		case DIRECTION_NONE: speedX = speedY = 0; break;
-		}
+		if (KeyHandler.isLeft())
+			speedX = -maxSpeed;
+		else if (KeyHandler.isRight())
+			speedX = maxSpeed;
+		else
+			speedX = 0;
 		
 		offsetY += speedY / 1000.0 * ms;
 		offsetX += speedX / 1000.0 * ms;
@@ -113,10 +109,6 @@ public class Painter extends JPanel {
 	
 	public static int getOffsetY() {
 		return (int) offsetY;
-	}
-	
-	public static void setDirection(int direction) {
-		Painter.direction = direction;
 	}
 	
 	public static int getPanelWidth() {

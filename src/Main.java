@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String args[]) {
 		Tools.createTileset();
 		Tools.createImages();
-		Map.createMap(Tools.parseData(Tools.loadFile("testmap.txt")));
+		Map.createMap(Tools.loadMap());
 		
 		new ToolStore(4*Tile.getSize(),3*Tile.getSize(),1);
 		new Menu();
@@ -54,7 +54,7 @@ public class Main {
 	}
 	
 	
-	public static void createWindowAndPainter() {
+	private static void createWindowAndPainter() {
 		Painter p = new Painter();
 		
 		Mousehandler m = new Mousehandler();

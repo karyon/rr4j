@@ -4,7 +4,7 @@ import java.util.List;
 
 public class RockRaider extends GameObject
 {
-	private GameObject carryLoad = this;
+	private GameObject carryLoad = null;
 	
 	/** The target coordinates this RockRaider is moving to. 
 	 * Equal to x and y if this RockRaider is not moving. */
@@ -35,8 +35,7 @@ public class RockRaider extends GameObject
 
 	
 	
-	public RockRaider(double x, double y)
-	{
+	public RockRaider(double x, double y) {
 		super(x, y, size, size);
 		tarX = x;
 		tarY = y;
@@ -46,19 +45,17 @@ public class RockRaider extends GameObject
 		
 		abilities = new boolean[4]; 
 		abilities[0]=true;
-		for(int i=1;i<abilities.length;i++){
-			abilities[i]=false;
-		}
-		
 	}
 	
 	/**
-	 * Moves this RockRaider by the specified time.
+	 * Updates this RockRaider for the specified time.
 	 * @param ms
 	 */
-	public void update(int ms) {
-		carryLoad.setX(x);
-		carryLoad.setY(y);
+	private void update(int ms) {
+		if (carryLoad != null) {
+			carryLoad.setX(x);
+			carryLoad.setY(y);
+		}
 		if (timer > 0) {
 			timer -= ms;
 			if (timer <= 0) {
@@ -67,7 +64,11 @@ public class RockRaider extends GameObject
 			}
 			return;
 		}
-			
+		move(ms);
+	}
+	
+	
+	private void move(int ms) {	
 		if (tarX == x && tarY == y)
 			return;
 		double maxMovement = moveSpeed/1000.0 * ms;
@@ -116,13 +117,6 @@ public class RockRaider extends GameObject
 					return tiles[x][y];
 			}
 		}
-		/*
-		for (RockRaider r : allRockRaiders) {
-			if (r == this)
-				continue;
-			if (this.intersects(r))
-				return r;
-		}*/
 		
 		ArrayList<Building> building = Building.getBuildingList();
 		for (Building b: building){
@@ -137,19 +131,19 @@ public class RockRaider extends GameObject
 	}
 	
 	
-	public void goToJob(List<Tile> path) {
+	private void goToJob(List<Tile> path) {
 		for (final Tile t: path) {
-//			System.out.println("New job added: goTo " + (t.x+20) + ", " + (t.y+20));
 			jobList.addJob(new Job() {
 				@Override
 				public void execute() {
-					RockRaider.this.setTarget(t.x+20, t.y+20);
+					tarX = t.x+20;
+					tarY = t.y+20;
 				}
 				@Override
 				public void cancel() {
-					RockRaider r = RockRaider.this;
-					r.setTarget(r.x, r.y);
-					r.carryLoad = r;
+					tarX = x;
+					tarY = y;
+					RockRaider.this.carryLoad = null;
 				}
 			});
 		}
@@ -173,15 +167,17 @@ public class RockRaider extends GameObject
 	}
 	
 	
-	public boolean goToObjectJob(GameObject object){
-		int height = object.getHeight();
-		int width = object.getWidth();
-		System.out.println("Object taken");
-		ArrayList<Tile> possibleTargets = new ArrayList<Tile>();
-		possibleTargets.add(Map.getMap().getTileAt(object.x - size-2, object.y + 21));
-		possibleTargets.add(Map.getMap().getTileAt(object.x + width+2, object.y + 21));
-		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y - size - 2));
-		possibleTargets.add(Map.getMap().getTileAt(object.x + 20, object.y + height + 2));
+	private boolean goToObjectJob(GameObject object){
+		List<Tile> possibleTargets;
+		if (object instanceof Tile) {
+			possibleTargets = Map.getMap().getAdjacentTiles((Tile) object);
+		}
+		else if (object instanceof Building) {
+			possibleTargets = Map.getMap().getAdjacentTiles(Map.getMap().getTileAt(object.x, object.y));
+		}
+		else
+			return false;
+		
 		List<Tile> path = new AStar(Map.getMap().getTileAt(x, y), possibleTargets).getPath();
 		if (path == null)
 			return false;
@@ -189,74 +185,74 @@ public class RockRaider extends GameObject
 		return true;
 	}
 	
-	public void takeObjectJob (final GameObject object){
-		
+	
+	private void takeObjectJob (final GameObject object){
 		jobList.addJob(new Job(){
 			@Override
 			public void execute() {
 				RockRaider.this.carryLoad = object;
 				jobList.jobDoneExecuteNext();
-				
 			};
-			});
+		});
 	}
 	
 	/**
-	 * Method allows RockRaiders to take resources based on the given kind of resource while creating 2 goToJobs (one to the res one back to the ToolStore)
+	 * Creates four Jobs: 1. go to the object, 2. take the object, 
+	 * 3. go to the ToolStore, 4. drop the object in the ToolStore
 	 * @param kind 1 = Ore, 0 = Meth
 	 * @param object
 	 */
-	public void takeRes (final int kind, final GameObject object) {
-		if (carryLoad == object) carryLoad = this;
+	public void takeRes (final GameObject object) {
+		if (carryLoad == object) carryLoad = null;
 		if (!KeyHandler.isCtrl()){jobList.cancelAll();}
 		if (!goToJob(object.x, object.y , false))
 			return;
-		takeObjectJob (object);
+		takeObjectJob(object);
 		jobList.addJob(new Job(){
 			public void execute() {
-				if (!goToObjectJob(Building.getBuildingList().get(0)))
+				if (!goToObjectJob(Building.getBuildingList().get(0))) {
+					jobList.cancelAll();
 					return;
-				switch (kind){
-				case 1:
-					jobList.addJob(new Job(){
-						@Override
-						public void execute() {
-							Player.setOre(Player.getOre()+1);
-							System.out.println(Player.getOre());
-							carryLoad = RockRaider.this;
-							Ore.getOreList().remove(object);
-							jobList.jobDoneExecuteNext();
-							
-						}
-					});
-		
-					break;
-				case 0:jobList.addJob(new Job(){
-					@Override
-					public void execute() {
-						Player.setCrystal(Player.getCrystal()+1);
-						carryLoad = RockRaider.this;
-						Crystal.getCrystalList().remove(object);
-						System.out.println("bis hierhin?");
-						jobList.jobDoneExecuteNext();
-						}
-					});
-					break;
-					
 				}
+				addResourceJob(object);
 				jobList.jobDoneExecuteNext();
 			}
 		});
-		
 	}
-		
+	
+	private void addResourceJob(final GameObject res) {
+		if (res instanceof Ore) {
+			jobList.addJob(new Job(){
+				@Override
+				public void execute() {
+					Player.setOre(Player.getOre()+1);
+					System.out.println(Player.getOre());
+					carryLoad = null;
+					Ore.getOreList().remove(res);
+					jobList.jobDoneExecuteNext();
+					
+				}
+			});
+		}
+		else if (res instanceof Crystal) {
+			jobList.addJob(new Job(){
+				@Override
+				public void execute() {
+					Player.setCrystal(Player.getCrystal()+1);
+					carryLoad = null;
+					Crystal.getCrystalList().remove(res);
+					jobList.jobDoneExecuteNext();
+				}
+			});
+		}
+	}
 	
 	
-	public void waitJob(final int ms) {
+	private void waitJob(final int ms) {
 		jobList.addJob(new Job() {
 			@Override
 			public void execute() {
-				setTimer(ms);
+				timer = ms;
 			}
 			
 			@Override
@@ -265,30 +261,6 @@ public class RockRaider extends GameObject
 			}
 		});
 	}
-
-	private void setTarget(double x, double y) {
-		tarX = x;
-		tarY = y;
-		System.out.println(x + " " + y);
-	}
-	
-	private void setTimer(int ms) {
-		timer = ms;
-	}
-	
-	public int getID() {
-		return ID;
-	}
-	
-	public static ArrayList<RockRaider> getRockRaiderList() {
-		return allRockRaiders;
-	}
-
-	public static void updateAll(int ms) {
-		for (RockRaider f : allRockRaiders)
-			f.update(ms);
-	}
-
 	
 	/**
 	 * Adds two Jobs to jobList: the first one lets this RockRaider 
@@ -296,28 +268,26 @@ public class RockRaider extends GameObject
 	 * @param t The Tile this RockRaider should goTo and destroy.
 	 */
 	public void goToAndDestroy(Tile t) {
-		System.out.println("goToAndDestroy aufgerufen");
 		jobList.cancelAll();
 		//goTo the Tile t
 		switch (t.getType()) {
 		case Tile.TYPE_DIRT:
+			if (!goToObjectJob(t))
+				return;
+			waitJob(300);
+			break;
 		case Tile.TYPE_LOOSE_ROCK:
 			if (!goToObjectJob(t))
 				return;
+			waitJob(800);
 			break;
 		case Tile.TYPE_RUBBLE:
 			if (!goToJob(t.x + 10, t.y + 10, false))
 				return;
+			waitJob(500);
 			break;
 		default: return;
 		}
-		switch (t.getType()) {
-		case Tile.TYPE_DIRT: waitJob(300); break;
-		case Tile.TYPE_LOOSE_ROCK: waitJob(800); break;
-		case Tile.TYPE_RUBBLE: waitJob(500); break;
-		default: return;
-		}
-		waitJob(500);
 		//new Job: destroy t
 		destroy(t);
 	}
@@ -332,9 +302,20 @@ public class RockRaider extends GameObject
 		});
 	}
 	
+	public int getID() {
+		return ID;
+	}
+	
+	public static ArrayList<RockRaider> getRockRaiderList() {
+		return allRockRaiders;
+	}
+
+	public static void updateAll(int ms) {
+		for (RockRaider f : allRockRaiders)
+			f.update(ms);
+	}
 	
 	public static int getSize() {
 		return size;
 	}
-	
 }

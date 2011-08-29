@@ -5,48 +5,56 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
 	private static boolean ctrl = false;
-	public static boolean isCtrl() {
-		return ctrl;
-	}
-	
-	public static void setCtrl(boolean ctrl){
-		KeyHandler.ctrl = ctrl;
-	}
+	private static boolean up = false, down = false, left = false, right = false;
 
-
+	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()){
 		case KeyEvent.VK_CONTROL: ctrl = true; break;
-		case KeyEvent.VK_UP: Painter.setDirection(Painter.DIRECTION_UP); break;
-		case KeyEvent.VK_DOWN: Painter.setDirection(Painter.DIRECTION_DOWN); break;
-		case KeyEvent.VK_LEFT: Painter.setDirection(Painter.DIRECTION_LEFT); break;
-		case KeyEvent.VK_RIGHT: Painter.setDirection(Painter.DIRECTION_RIGHT); break;
+		case KeyEvent.VK_UP: up = true; break;
+		case KeyEvent.VK_DOWN: down = true; break;
+		case KeyEvent.VK_LEFT: left = true; break;
+		case KeyEvent.VK_RIGHT: right = true; break;
 		}
-		
 	}
 
-	
+	@Override
 	public void keyReleased(KeyEvent e) {
-
 		switch (e.getKeyCode()){
-		case KeyEvent.VK_CONTROL:
-			ctrl = false;
-			break;
-
-		case KeyEvent.VK_UP:
-		case KeyEvent.VK_DOWN:
-		case KeyEvent.VK_LEFT:
-		case KeyEvent.VK_RIGHT: Painter.setDirection(Painter.DIRECTION_NONE); break;
+		case KeyEvent.VK_CONTROL: ctrl = false; break;
+		case KeyEvent.VK_UP: up = false; break;
+		case KeyEvent.VK_DOWN: down = false; break;
+		case KeyEvent.VK_LEFT: left = false; break;
+		case KeyEvent.VK_RIGHT: right = false; break;
 		}
-		
 	}
 
-	
+	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
+
 	
+	public static boolean isUp() {
+		return up;
+	}
+
+	public static boolean isDown() {
+		return down;
+	}
+
+	public static boolean isLeft() {
+		return left;
+	}
+
+	public static boolean isRight() {
+		return right;
+	}
+
+	public static boolean isCtrl() {
+		return ctrl;
+	}
 	
 	
 

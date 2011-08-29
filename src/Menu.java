@@ -15,7 +15,16 @@ public class Menu {
 	private static Button lastPressed;
 	private static boolean wait4klick=false;
 	private static boolean disaim=true;
+	private static boolean destroyClicked = false;
 	
+	public static boolean isDestroyClicked() {
+		return destroyClicked;
+	}
+
+	public static void setDestroyClicked(boolean destroyClicked) {
+		Menu.destroyClicked = destroyClicked;
+	}
+
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
 		menuPos=Painter.getPanelWidth()-40;
@@ -58,7 +67,7 @@ public class Menu {
 		
 		if(bm.isRockRaider()){
 			for(int i=0; i < abilities.length; i++){
-				buttons[i] = new Button(1, i+1, abilities[i],o);
+				buttons[i] = new Button(1, i, abilities[i],o);
 			}
 			return;
 				
@@ -66,7 +75,7 @@ public class Menu {
 				
 		if(bm.isBuilding()) {
 			for(int i=0; i< abilities.length; i++){
-				buttons[i] = new Button(2, i+1,abilities[i],o);
+				buttons[i] = new Button(2, i,abilities[i],o);
 			}
 			return;
 		}

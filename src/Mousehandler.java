@@ -23,6 +23,8 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	
 	private static boolean drawSelectionRect = false;
 	
+
+	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -58,6 +60,10 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 		
 		if (arg0.getButton() == MouseEvent.BUTTON1) {
 			if (Menu.buttonHit(arg0.getX(),arg0.getY())){
+				if(Menu.isDestroyClicked()){
+					singleSelect(arg0.getX(),arg0.getY());System.out.println("k");
+				}
+				
 				return;
 			}
 			if(Menu.getDisaim())
@@ -201,6 +207,12 @@ public class Mousehandler implements MouseListener, MouseMotionListener{
 	
 	public static ArrayList<GameObject> getSelection(){
 		return selection;
+	}
+
+
+	public static void clearSelection() {
+		System.out.println("Ich klearä die Sälehktion");
+		selection = new ArrayList<GameObject>();
 	}
 	
 }

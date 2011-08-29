@@ -5,12 +5,10 @@ public class ToolStore extends Building {
 	public ToolStore(double x, double y, int type) {
 		super(x, y, type);
 
-		abilities = new boolean[5];
+		abilities = new boolean[2];
 		abilities[0]=true;
 		abilities[1]=true;
-		for(int i=1;i<abilities.length;i++){
-			abilities[i]=false;
-		}		
+			
 	}
 	
 	public void spawnRockRaider(){

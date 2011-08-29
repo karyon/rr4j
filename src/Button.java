@@ -36,7 +36,7 @@ public class Button {
 	}
 	
 	public void doit(){
-		ArrayList<GameObject> s= Mousehandler.getSelection();
+		ArrayList<GameObject> s= MouseHandler.getSelection();
 		Menu.setWait4klick(false);
 		
 		System.out.println(o.isRockRaider());

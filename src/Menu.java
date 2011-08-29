@@ -38,25 +38,18 @@ public class Menu {
 		if(visible){
 			for(int i=0;i<buttons.length;i++){
 				Button b=buttons[i];
-				if(b.getImage() != null)
-					g.drawImage(b.getImage(),menuPos,(buttons.length-i)*bgroesse,null);	
+				g.drawImage(b.getImage(),menuPos,(buttons.length-i)*bgroesse,null);	
 			}
 		}
 		
-		String txt="Player: " + "  Ore = " + Player.getOre() + "  Cristals = " + Player.getCrystal();
-		char[] c= txt.toCharArray();
-		int size=0;
-		for(int i=0;i<c.length;i++){
-			size++;
-		}
+		String txt="Player:   Ore = " + Player.getOre() + "  Crystals = " + Player.getCrystal();
+		int size=txt.length();
 		int y=Painter.getPanelHeight();
 		g.setColor(Color.black);
 		g.fillRect(0, y-20, size*6+6, 20);
 		g.setColor(Color.yellow);
 		g.drawRect(0,y-20,size*6 + 6, 20 );
 		g.drawString(txt,5,y-5);
-		
-		
 	}	
 	
 	public static void createButtons(GameObject bm){

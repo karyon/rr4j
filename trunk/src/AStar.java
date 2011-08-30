@@ -93,6 +93,8 @@ public class AStar
 		lastCost = bestCost;
 		System.out.println("hi2");
 	}
+	
+	
 
 	/**
 	 * Cost for the operation to go to <code>to</code> from <code>from</from>.

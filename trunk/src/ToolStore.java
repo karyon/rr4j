@@ -1,10 +1,14 @@
+import java.util.ArrayList;
+
 
 public class ToolStore extends Building {
 
 	//protected final int ID;
+	
 	public ToolStore(double x, double y, int type) {
 		super(x, y, type);
 
+		Building.buildingLists[0].add(this);
 		abilities = new boolean[2];
 		abilities[0]=true;
 		abilities[1]=true;

@@ -208,13 +208,24 @@ public class RockRaider extends GameObject
 		if (!goToJob(object.x, object.y , false))
 			return;
 		takeObjectJob(object);
+	
 		jobList.addJob(new Job(){
 			public void execute() {
-				if (!goToObjectJob(Building.getBuildingList().get(0))) {
+				ArrayList<Tile> BuildingTiles = new ArrayList<Tile>();	
+				for (int i = 0;i< Building.buildingLists[0].size();i++){
+					Building b = Building.buildingLists[0].get(i);
+					BuildingTiles.addAll(Map.getMap().getAdjacentTiles(Map.getMap().getTileAt(b.x, b.y))); // Alles Selbsterklärend
+				}
+					
+				AStar aStar = new AStar(Map.getMap().getTileAt(x, y),BuildingTiles);
+				
+				if (aStar.getPath()==null) {
 					jobList.cancelAll();
 					return;
 				}
+				RockRaider.this.goToJob(aStar.getPath());
 				addResourceJob(object);
+				System.out.println("Test");
 				jobList.jobDoneExecuteNext();
 			}
 		});

@@ -15,6 +15,7 @@ public class Main {
 		Map.createMap(Tools.loadMap());
 		
 		new ToolStore(4*Tile.getSize(),3*Tile.getSize(),1);
+		new ToolStore(6*Tile.getSize(),4*Tile.getSize(),1);
 		new Menu();
 		
 		Random r = new Random();

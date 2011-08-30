@@ -55,13 +55,13 @@ public class MouseEventListener implements MouseListener, MouseMotionListener{
 		
 		if (arg0.getButton() == MouseEvent.BUTTON1) {
 			if (Menu.buttonHit(arg0.getX(),arg0.getY())){
-				if(Menu.isDestroyClicked()){
+				if(Menu.isDisaim()){
 					MouseHandler.singleSelect(arg0.getX(),arg0.getY());System.out.println("k");
 				}
 				
 				return;
 			}
-			if(Menu.getDisaim())
+			if(Menu.isDisaim())
 				MouseHandler.clearSelection();
 		}
 		

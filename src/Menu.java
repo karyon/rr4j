@@ -7,23 +7,14 @@ import java.awt.Toolkit;
 public class Menu {
 	
 	private static Image img;
-	private static int menuPos;
+	private static int menuPos; // y position of the first button of menu (show-/hidebutton)
 	private static Button[] buttons;
 	private static boolean visible = true;
 	private static GameObject o;
 	private static int bgroesse;
 	private static Button lastPressed;
-	private static boolean wait4klick=false;
-	private static boolean disaim=true;
-	private static boolean destroyClicked = false;
-	
-	public static boolean isDestroyClicked() {
-		return destroyClicked;
-	}
-
-	public static void setDestroyClicked(boolean destroyClicked) {
-		Menu.destroyClicked = destroyClicked;
-	}
+	private static boolean wait4klick=false; //if next mouse click call another function of a button by clicking at any point of the map
+	private static boolean disaim=true; //if true, by next click -> clear current target
 
 	public Menu(){
 		img = Toolkit.getDefaultToolkit().createImage("res/Menu.png");
@@ -33,6 +24,10 @@ public class Menu {
 		
 	}
 	
+	/**
+	 * Draw images and the Playermenu.
+	 * (Menubutton + images of all active buttons)
+	 */
 	public static void paint(Graphics g){
 		g.drawImage(img,menuPos,1,null);
 		if(visible){
@@ -52,13 +47,17 @@ public class Menu {
 		g.drawString(txt,5,y-5);
 	}	
 	
-	public static void createButtons(GameObject bm){
-		o=bm;
-		boolean[] abilities = bm.getAbilities();
-		
+	/**
+	 * creates buttons for the current target
+	 * @param gameObject current target
+	 */
+	public static void createButtons(GameObject gameObject){
+		o=gameObject;
+		boolean[] abilities = o.getAbilities();
+		disaim=false;
 		buttons = new Button[abilities.length];	
 		
-		if(bm.isRockRaider()){
+		if(o.isRockRaider()){
 			for(int i=0; i < abilities.length; i++){
 				buttons[i] = new Button(1, i, abilities[i],o);
 			}
@@ -66,24 +65,30 @@ public class Menu {
 				
 		}
 				
-		if(bm.isBuilding()) {
+		if(o.isBuilding()) {
 			for(int i=0; i< abilities.length; i++){
 				buttons[i] = new Button(2, i,abilities[i],o);
 			}
 			return;
 		}
 				
-		if(bm.isTile()){
+		if(o.isTile()){
 			
 			return;
 		}
 		
 	}
 	
+	/**
+	 * removes buttons by creating a clear list
+	 */
 	public static void delSelected(){
 		buttons= new Button[0];
 	}
 	
+	/**
+	 * Change the visibility of all button of the menu (except the show-/hidebutton ;P )
+	 */
 	public static void menuButtonClicked(){
 		if(visible)
 			visible=false;
@@ -91,6 +96,12 @@ public class Menu {
 			visible=true;
 	}
 
+	/**
+	 * If a button is hit this method call the buttons function and returns true
+	 * @param x x position of the mouseclick
+	 * @param y y position of the mouseclick
+	 * @return returns true if one button is clicked
+	 */
 	public static boolean buttonHit(int x, int y) {
 		
 		disaim=true;
@@ -105,7 +116,7 @@ public class Menu {
 				for(int i=0;i<buttons.length;i++){
 					if(y>=(buttons.length-(i))*bgroesse && y<(buttons.length-(i))*bgroesse+40){
 						if(visible)
-							buttons[i].callFunction(o.getX(),o.getY());
+							buttons[i].callFunction();
 						return true;					
 					}
 				}
@@ -137,7 +148,7 @@ public class Menu {
 		Menu.disaim = disaim;
 	}
 
-	public static boolean getDisaim() {
+	public static boolean isDisaim() {
 		return disaim;
 	}
 }

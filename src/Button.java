@@ -30,11 +30,10 @@ public class Button {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-
-	public boolean isActive() {
-		return active;
-	}
 	
+	/**
+	 * execute the prepared function
+	 */
 	public void doit(){
 		ArrayList<GameObject> s= MouseHandler.getSelection();
 		Menu.setWait4klick(false);
@@ -52,7 +51,11 @@ public class Button {
 			}
 	}
 
-	public void callFunction(double x, double y) {
+	/**
+	 * execute the buttons function or
+	 * prepares the execution
+	 */
+	public void callFunction() {
 		
 		if(o.isRockRaider()){
 			if(button==1){
@@ -71,9 +74,8 @@ public class Button {
 		else if(o.isBuilding()){
 			if(button == 0){
 				((Building)o).destroyBuilding();
-				Menu.setDestroyClicked(true);
+				Menu.setDisaim(true);
 				
-			
 			}
 				if(o.isToolStore())
 					if(button==1)

@@ -32,10 +32,14 @@ public class Map {
 		ArrayList<Tile> ret = new ArrayList<Tile>(4);
 		int x = (int) t.x / Tile.getSize();
 		int y = (int) t.y / Tile.getSize();
-		ret.add(mapFields[x-1][y]);
-		ret.add(mapFields[x][y-1]);
-		ret.add(mapFields[x+1][y]);
-		ret.add(mapFields[x][y+1]);
+		if (x > 0)
+			ret.add(mapFields[x-1][y]);
+		if (y > 0)
+			ret.add(mapFields[x][y-1]);
+		if (x < mapFields.length - 1)
+			ret.add(mapFields[x+1][y]);
+		if (y < mapFields[0].length - 1)
+			ret.add(mapFields[x][y+1]);
 		return ret;
 	}
 	

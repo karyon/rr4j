@@ -15,11 +15,14 @@ public class Tile extends GameObject{
 	final static int TYPE_HARD_ROCK = 5;
 	final static int TYPE_LOOSE_ROCK = 6;
 	final static int TYPE_DIRT = 7;
-	
+
 	
 	
 	public Tile (int x, int y, int type){
 		super(x, y, size, size);
+		abilities = new boolean[1]; 
+		abilities[0]=true;
+		
 		this.type = type;
 		
 		walkable = type == TYPE_GROUND || type == TYPE_RUBBLE;
@@ -45,6 +48,7 @@ public class Tile extends GameObject{
 		this.visible = visible;
 	}
 
+	
 	public void destroy() {
 		switch (type) {
 		case TYPE_DIRT:
@@ -66,6 +70,12 @@ public class Tile extends GameObject{
 	
 	public String toString() {
 		return "(" + x/64 + ", " + y/64 + ")";
+	}
+
+
+	public void createToolStore(double x,double y) {
+		new ToolStore(x, y, 1);
+		
 	}
 
 }

@@ -117,8 +117,6 @@ public class MouseHandler {
 		}
 	}
 	
-
-
 	
 	public static ArrayList<GameObject> getSelection(){
 		return selection;

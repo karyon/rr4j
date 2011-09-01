@@ -60,6 +60,9 @@ public class Painter extends JPanel {
 		for (Crystal c: Crystal.getCrystalList())
 			drawImage(g, Tools.getCrystalImage(), c.getX(), c.getY());
 		
+		for (Dynamite d: Dynamite.getDynamiteList())
+			drawImage(g, Tools.getDynamiteImage(),d.getX(), d.getY());
+		
 		int[] selectionRect = MouseEventListener.getSelectionRect();
 		if (selectionRect != null) {
 			g.setColor(Color.WHITE);

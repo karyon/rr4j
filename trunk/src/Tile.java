@@ -6,6 +6,7 @@ public class Tile extends GameObject{
 	private int type;  //Tile Typ
 	private boolean walkable;
 	private static final int size = 64;
+	private boolean visible = false;
 	
 	final static int TYPE_GROUND = 0;
 	final static int TYPE_WATER = 1;
@@ -35,6 +36,14 @@ public class Tile extends GameObject{
 	public boolean isWalkable() {
 		return walkable;
 	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
+	
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 
 	public void destroy() {
 		switch (type) {
@@ -42,6 +51,8 @@ public class Tile extends GameObject{
 		case TYPE_LOOSE_ROCK:
 			type = TYPE_RUBBLE;
 			walkable = true;
+			for (Tile t: Map.getMap().getAdjacentTiles(this))
+				t.setVisible(true);
 			break;
 		case TYPE_RUBBLE:
 			Random r = new Random();

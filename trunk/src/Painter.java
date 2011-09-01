@@ -27,6 +27,10 @@ public class Painter extends JPanel {
 		for (int x = 0; x < mapFields.length; x++) {
 			for (int y = 0; y < mapFields[0].length; y++) {
 				Tile currTile = mapFields[x][y];
+				if (!currTile.isVisible()) {
+					drawImage(g, Tools.getFogImage(), x * tileSize, y * tileSize);
+					continue;
+				}
 				int tileImageID;
 				switch (currTile.getType()) {
 				case Tile.TYPE_GROUND:       tileImageID = 0; break;
@@ -61,7 +65,8 @@ public class Painter extends JPanel {
 			g.setColor(Color.WHITE);
 			g.drawRect(selectionRect[0], selectionRect[1], selectionRect[2], selectionRect[3]);
 		}
-		
+
+			
 		Menu.paint(g);
 	}
 	

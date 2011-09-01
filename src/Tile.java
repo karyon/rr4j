@@ -52,6 +52,7 @@ public class Tile extends GameObject{
 	public void destroy() {
 		switch (type) {
 		case TYPE_DIRT:
+		case TYPE_HARD_ROCK:
 		case TYPE_LOOSE_ROCK:
 			type = TYPE_RUBBLE;
 			walkable = true;

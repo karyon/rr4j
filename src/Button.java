@@ -40,15 +40,19 @@ public class Button {
 		
 		System.out.println(o.isRockRaider());
 		
-		if(o.isRockRaider())
-			if(button==0){
-				System.out.println(o.isRockRaider());
-				RockRaider r = (RockRaider)o;
-				System.out.println(o.isRockRaider());
-				if(s.get(0).isTile())
+		if(o.isRockRaider()){
+			RockRaider r = (RockRaider)o;
+			if(button==1){
+				if(((Tile)s.get(0)).getType() == 6 || ((Tile)s.get(0)).getType() == 7)
 					r.goToAndDestroy(Map.getMap().getTileAt(s.get(0).getX(),s.get(0).getY()));				
 				return;
 			}
+			else if(button==3){
+				if(((Tile)s.get(0)).getType() == 5)
+					r.goToAndDestroy(Map.getMap().getTileAt(s.get(0).getX(),s.get(0).getY()));
+				return;
+			}
+		}
 	}
 
 	/**
@@ -63,27 +67,30 @@ public class Button {
 		
 		
 		if(o.isRockRaider()){
-			if(button==0){
+			if(button==1){
 				Menu.setLastPressed(this);
 				Menu.setWait4klick(true);
 				Menu.setDisaim(false);
 			}
-			else if(button==1)
-				System.out.println("reinforce");
 			else if(button==2)
-				System.out.println("dynamite");
-			else if(button==3)
+				System.out.println("reinforce");
+			else if(button==3){
+				Menu.setLastPressed(this);
+				Menu.setWait4klick(true);
+				Menu.setDisaim(false);
+			}
+			else if(button==4)
 				System.out.println("upgrade");
 			
 		}
 		else if(o.isBuilding()){
-			if(button == 1){
+			if(button == 0){
 				((Building)o).destroyBuilding();
 				Menu.setDisaim(true);
 				
 			}
 				if(o.isToolStore())
-					if(button==0)
+					if(button==1)
 						((ToolStore)o).spawnRockRaider();
 					
 				    

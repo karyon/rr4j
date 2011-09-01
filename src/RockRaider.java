@@ -23,6 +23,9 @@ public class RockRaider extends GameObject
 	private int timer = 0;
 	
 	
+	private int life = 100;
+	
+	
 	
 	/** Width and height of all RockRaiders. */
 	private static final int size = 20;
@@ -52,6 +55,10 @@ public class RockRaider extends GameObject
 	 * @param ms
 	 */
 	private void update(int ms) {
+		
+		if(life==0)
+			killRockraider();
+		
 		if (carryLoad != null) {
 			carryLoad.setX(x);
 			carryLoad.setY(y);
@@ -211,24 +218,29 @@ public class RockRaider extends GameObject
 	
 		jobList.addJob(new Job(){
 			public void execute() {
-				ArrayList<Tile> BuildingTiles = new ArrayList<Tile>();	
-				for (int i = 0;i< Building.buildingLists[0].size();i++){
-					Building b = Building.buildingLists[0].get(i);
-					BuildingTiles.addAll(Map.getMap().getAdjacentTiles(Map.getMap().getTileAt(b.x, b.y))); // Alles Selbsterklärend
-				}
-					
-				AStar aStar = new AStar(Map.getMap().getTileAt(x, y),BuildingTiles);
-				
-				if (aStar.getPath()==null) {
-					jobList.cancelAll();
-					return;
-				}
-				RockRaider.this.goToJob(aStar.getPath());
+				nextToolstore();
 				addResourceJob(object);
 				System.out.println("Test");
 				jobList.jobDoneExecuteNext();
 			}
 		});
+	}
+	
+	public void nextToolstore(){
+		ArrayList<Tile> BuildingTiles = new ArrayList<Tile>();	
+		for (int i = 0;i< Building.buildingLists[0].size();i++){
+			Building b = Building.buildingLists[0].get(i);
+			BuildingTiles.addAll(Map.getMap().getAdjacentTiles(Map.getMap().getTileAt(b.x, b.y))); // Alles Selbsterklärend
+		}
+		
+		AStar aStar = new AStar(Map.getMap().getTileAt(x, y),BuildingTiles);
+		
+		if (aStar.getPath()==null) {
+			jobList.cancelAll();
+			return;
+		}
+		RockRaider.this.goToJob(aStar.getPath());
+		
 	}
 	
 	private void addResourceJob(final GameObject res) {
@@ -297,6 +309,15 @@ public class RockRaider extends GameObject
 				return;
 			waitJob(500);
 			break;
+		case Tile.TYPE_HARD_ROCK:
+			if(!goToObjectJob(t))
+				return;
+			System.out.println("blubb");
+			nextToolstore();
+			waitJob(100);
+			//takeDynamite();
+			//layAndDetonate();
+			break;
 		default: return;
 		}
 		//new Job: destroy t
@@ -328,5 +349,16 @@ public class RockRaider extends GameObject
 	
 	public static int getSize() {
 		return size;
+	}
+	
+	public void damageTaken(int dmg){
+		if(dmg>life)
+			life=0;
+		else
+			life -= dmg;
+	}
+	
+	public void killRockraider(){
+		allRockRaiders.remove(this);
 	}
 }

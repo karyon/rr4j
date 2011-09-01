@@ -43,7 +43,7 @@ public class RockRaider extends GameObject
 		nextID++;
 		allRockRaiders.add(this);
 		
-		abilities = new boolean[4]; 
+		abilities = new boolean[5]; 
 		abilities[0]=true;
 	}
 	

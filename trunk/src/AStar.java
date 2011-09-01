@@ -1,211 +1,156 @@
-/*    
- * A* algorithm implementation.
- * Copyright (C) 2007, 2009 Giuseppe Scrivano <gscrivano@gnu.org>
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-                        
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, see <http://www.gnu.org/licenses/>.
- */
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-/**
- * A* algorithm implementation using the method design pattern.
- * 
- * @author Giuseppe Scrivano
- */
-public class AStar
- {
-	private class Path implements Comparable<Path> {
-		public Tile point;
-		public double f;
-		public double g;
-		public Path parent;
-		
-		
-		public Path(Tile point) {
-			this.point = point;
-			parent = null;
-			g = f = 0.0;
-		}
 
-		public Path(Path parent, Tile point) {
+
+public class AStar {
+	
+	private class Node implements Comparable<Node>{
+		public double g;
+		public double f;
+		public Tile t;
+		public Node parent;
+		
+		public Node(Tile t, double g, double h, Node parent) {
+			this.t = t;
+			this.g = g;
+			this.f = g + h;
 			this.parent = parent;
-			this.point = point;
-			g = parent.g + g(parent.point, point);
-			f = f(this);
+		}
+		@Override
+		public int compareTo(Node n) {
+			return (int)(f - n.f);
 		}
 		
-		
-		public int compareTo(Path p) {
-			return (int) (f - p.f);
-		}
 	}
 	
-
-
-	private final PriorityQueue<Path> openList = new PriorityQueue<Path>();
-	private final HashMap<Tile, Double> mindists = new HashMap<Tile, Double>();
-	private double lastCost = Double.MAX_VALUE;
+	private final HashMap<Tile, Double> f = new HashMap<Tile, Double>(150, 1);
+	private final PriorityQueue<Node> openList = new PriorityQueue<Node>(50);
+	
+	private List<Tile> result;
+	private double cost = Double.MAX_VALUE;
 	
 	private Tile goal;
-	private List<Tile> result;
 	
-	/**
-	 * Computes and saves the shortest path from start to goal.
-	 * @param start
-	 * @param goal
-	 */
+	
+	
+	
 	public AStar(Tile start, Tile goal) {
-		result = compute(start, goal);
-		System.out.println("hi");
+		this.goal = goal;
+		result = findPath(start);
+		start.hashCode();
 	}
 	
-	/**
-	 * Computes the shortest paths from start to all goals and saves the shortest one.
-	 * @param start
-	 * @param goals
-	 */
 	public AStar(Tile start, List<Tile> goals) {
-		//TODO could be optimized by defining one isGoal function, defining one
-		//point for the h() function and calling compute only once
+
 		double bestCost = Double.MAX_VALUE;
 		for (Tile t: goals) {
-			List<Tile> temp = compute(start, t);
-			if (lastCost < bestCost) {
+			this.goal = t;
+			List<Tile> temp = findPath(start);
+			if (cost < bestCost) {
 				result = temp;
-				bestCost = lastCost;
+				bestCost = cost;
 			}
+			openList.clear();
+//			g.clear(); //TODO is this really necessary?
 		}
-		lastCost = bestCost;
-		System.out.println("hi2");
+		cost = bestCost;
 	}
 	
 	
-
-	/**
-	 * Cost for the operation to go to <code>to</code> from <code>from</from>.
-	 * 
-	 * @param from 	The tile we are leaving.
-	 * @param to 	The node we are reaching.
-	 * @return 		The cost of the operation.
-	 */
-	private double g(Tile from, Tile to) {
-		return 1.0;
-	}
-
-	/**
-	 * Minimum/best-case cost to reach the goal tile.
-	 * Uses the Manhattan distance heuristic. 
-	 * 
-	 * @param from 	The node we are leaving.
-	 * @return 		The estimated cost to reach the goal node.
-	 */
-	private double h(Tile from) {
-		return (Math.abs(from.x - goal.x) + Math.abs(from.y - goal.y))/64;
-	}
-
-	/**
-	 * Total cost function to reach the goal from the start via the specified path.
-	 * 
-	 * The total cost is defined as: f(x) = g(x) + h(x).
-	 */
-	private double f(Path p) {
-		return p.g + h(p.point);
-	}
-
-	/**
-	 * Expands a path.
-	 * 
-	 * @param path 	The path to expand.
-	 */
-	private void expand(Path path) {
-		Double min = mindists.get(path.point);
-
-		//If a better path to this point already exists then don't expand it.
-		if (min == null || min.doubleValue() > path.f)
-			mindists.put(path.point, path.f);
-		else
-			return;
-		
-		
-		ArrayList<Tile> successors = Map.getMap().getAdjacentTiles(path.point);
-		successors.remove(path.parent.point); //don't go back to the parent
-		
-		for (Tile t : successors) {
-			if (t.isWalkable())
-				openList.offer(new Path(path, t));
-		}
-	}
-
-	/**
-	 * Returns the cost to reach the last tile in the path.
-	 * 
-	 * @return The cost for the found path.
-	 */
+	
 	public double getCost() {
-		return lastCost;
+		return cost;
 	}
 	
-	/**
-	 * Returns the computed path.
-	 * 
-	 * @return the computed path.
-	 */
-	public List<Tile> getPath() {
+	public List <Tile> getPath() {
 		return result;
 	}
 
-	/**
-	 * Finds and returns the shortest path from start to goal.
-	 * 
-	 * @param start The initial tile.
-	 * @param goal The goal tile.
-	 * @return A list of tiles from the initial point to a goal,
-	 *         <code>null</code> if a path doesn't exist.
-	 */
-	private List<Tile> compute(Tile start, Tile goal) {
-		if (!goal.isWalkable())
+	private double h(Tile from) {
+		return (Math.abs(from.x - goal.x) + Math.abs(from.y - goal.y))/64;
+	}
+	
+	private double g(Tile from, Tile to) {
+		return 1.0;
+	}
+	
+	
+	private void expand(Node n) {
+		Double mindist = f.get(n.t);
+		if (mindist == null || mindist > n.f) {
+			f.put(n.t, n.f);
+		}
+		else
+			return;
+		
+		for (Tile curr: Map.getMap().getAdjacentTiles(n.t)) {
+			if (curr != n.parent.t && curr.isWalkable()) {
+				Node n2 = new Node(curr, n.g + g(n.t, curr), h(curr), n);
+				Double g2 = f.get(curr);
+				if(g2 == null || g2 > n2.f) {
+					openList.offer(n2);
+				}
+			}
+		}
+	}
+	
+	
+	
+	private List<Tile> findPath(Tile start) {
+		if (!goal.isWalkable()) {
 			return null;
+		}
 		if (start == goal) {
-			lastCost = 0;
+			cost = 0;
 			return new LinkedList<Tile>();
 		}
-		this.goal = goal;
-		//expand the first tile manually
-		Path root = new Path(start);
-		for (Tile t : Map.getMap().getAdjacentTiles(start)) {
+		
+		Node startNode = new Node(start, 0, 0, null);
+		for (Tile t: Map.getMap().getAdjacentTiles(start)) {
 			if (t.isWalkable())
-				openList.offer(new Path(root, t));
+				openList.offer(new Node(t, 1, h(t), startNode));
 		}
-
-		while (!openList.isEmpty()) {
-			Path p = openList.poll();
-			
-			if (p.point == goal) {
-				lastCost = p.f;
-				LinkedList<Tile> retPath = new LinkedList<Tile>();
-				
-				for (Path i = p; i.parent != null; i = i.parent) {
-					retPath.addFirst(i.point);
+		
+		
+		while(!openList.isEmpty()) {
+			Node curr = openList.poll();
+			if (curr.t == goal) {
+				LinkedList<Tile> result = new LinkedList<Tile>();
+				cost = curr.f;
+				while (curr.parent != null) {
+					result.addFirst(curr.t);
+					curr = curr.parent;
 				}
-				return retPath;
+				return result;
 			}
-			expand(p);
+			
+			expand(curr);
 		}
 		return null;
 	}
+	
+	
+	public static List<Tile> getReachableTiles(Tile start) {
+		Tile curr = start;
+		List<Tile> result = new ArrayList<Tile>(50);
+		LinkedList<Tile> openList = new LinkedList<Tile>();
+		openList.add(start);
+		while(!openList.isEmpty()) {
+			curr = openList.removeFirst();
+			if (!curr.isWalkable() && curr.getType() != Tile.TYPE_WATER)
+				continue;
+			for (Tile t: Map.getMap().getAdjacentTiles(curr)) {
+				if (!result.contains(t)) {
+					openList.add(t);
+					result.add(t);
+				}
+			}
+		}
+		return result;
+	}
+
 }

@@ -24,6 +24,8 @@ public class Tools {
 	
 	private static Image crystalImage;
 	
+	private static Image fogImage;
+	
 	
 	/**
 	 * Splits the specified String around spaces and new Lines into a new int[][].
@@ -111,6 +113,11 @@ public class Tools {
 		g = crystalImage.getGraphics();
 		g.setColor(new Color(30, 230, 7));
 		g.fillRect(0, 0, Crystal.getSize()-1, Crystal.getSize()-1);
+		
+		fogImage = new BufferedImage(Tile.getSize(), Tile.getSize(), BufferedImage.TYPE_INT_ARGB);
+		g = fogImage.getGraphics();
+		g.setColor(new Color(0, 0, 0));
+		g.fillRect(0, 0, Tile.getSize(), Tile.getSize());
 	}
 	
 
@@ -133,8 +140,10 @@ public class Tools {
 	public static Image getCrystalImage() {
 		return crystalImage;
 	}
-
-
+	
+	public static Image getFogImage() {
+		return fogImage;
+	}
 	
 	
 	

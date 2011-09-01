@@ -1,13 +1,16 @@
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import javax.swing.*;
+
+import javax.swing.JFrame;
 
 
 public class Main {
 	private static Painter painter;
 	private static final int FPS = 60;
 	private static boolean isRunning = true;
+	
 	
 	public static void main(String args[]) {
 		Tools.createTileset();
@@ -16,6 +19,14 @@ public class Main {
 		
 		new ToolStore(4*Tile.getSize(),3*Tile.getSize(),1);
 		new ToolStore(6*Tile.getSize(),4*Tile.getSize(),1);
+		
+		
+		List<Tile> reachable = AStar.getReachableTiles(Map.getMap().getTileAt(4*Tile.getSize(),3*Tile.getSize()));
+		
+		for(Tile t: reachable) {
+			t.setVisible(true);
+		}
+		
 		new Menu();
 		
 		Random r = new Random();

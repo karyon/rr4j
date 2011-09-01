@@ -12,7 +12,7 @@ public class Button {
 	
 	public Button(int type, int button, boolean active,GameObject o){
 		
-		img = Toolkit.getDefaultToolkit().createImage("res/t"+type+"Button"+(button-1)+active+".png");
+		img = Toolkit.getDefaultToolkit().createImage("res/t"+type+"Button"+(button)+active+".png");
 		this.type = type;
 		this.button = button;
 		this.o=o;
@@ -41,7 +41,7 @@ public class Button {
 		System.out.println(o.isRockRaider());
 		
 		if(o.isRockRaider())
-			if(button==1){
+			if(button==0){
 				System.out.println(o.isRockRaider());
 				RockRaider r = (RockRaider)o;
 				System.out.println(o.isRockRaider());
@@ -56,29 +56,34 @@ public class Button {
 	 * prepares the execution
 	 */
 	public void callFunction() {
+		if(o.isTile()) {
+			((Tile )o).createToolStore(o.x,o.y);
+		}
+			
+		
 		
 		if(o.isRockRaider()){
-			if(button==1){
+			if(button==0){
 				Menu.setLastPressed(this);
 				Menu.setWait4klick(true);
 				Menu.setDisaim(false);
 			}
-			else if(button==2)
+			else if(button==1)
 				System.out.println("reinforce");
-			else if(button==3)
+			else if(button==2)
 				System.out.println("dynamite");
-			else if(button==4)
+			else if(button==3)
 				System.out.println("upgrade");
 			
 		}
 		else if(o.isBuilding()){
-			if(button == 0){
+			if(button == 1){
 				((Building)o).destroyBuilding();
 				Menu.setDisaim(true);
 				
 			}
 				if(o.isToolStore())
-					if(button==1)
+					if(button==0)
 						((ToolStore)o).spawnRockRaider();
 					
 				    

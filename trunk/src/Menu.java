@@ -73,7 +73,9 @@ public class Menu {
 		}
 				
 		if(o.isTile()){
-			
+			for(int i=0; i< abilities.length; i++){
+				buttons[i] = new Button(4, i,abilities[i],o);}
+
 			return;
 		}
 		

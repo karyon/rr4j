@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 
 public class MouseHandler {
-
 	/**
 	 * Currently selected objects.
 	 */
@@ -65,6 +64,17 @@ public class MouseHandler {
 				return;
 			}
 		}
+		
+		
+		if (Map.getMap().getTileAt(x, y).getType()==Tile.TYPE_GROUND){
+		
+			selection.add(Map.getMap().getTileAt(x, y));
+			Menu.createButtons(Map.getMap().getTileAt(x, y));
+			
+		return;}
+			
+		
+		
 		selection.add(Map.getMap().getTileAt(x, y));
 		
 
